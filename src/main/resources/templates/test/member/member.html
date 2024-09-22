@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!-- 헤더 -->
+<th:block th:replace="/include/fragments :: headerFragment"></th:block>
+<!-- 컨텐츠 영역 -->
+<div class="container">
+    <h3 class="mt3">고객 리스트</h3>
+
+    <form action="/member/search" method="post">
+        생년월일<input type="date" id="s_date" name="s_date"> ~ <input type="date" id="e_date" name="e_date">
+        <input type="text" name="name" placeholder="이름">
+        <select name="gender">
+            <option value="All">전체</option>
+            <option value="남">남</option>
+            <option value="여">여</option>
+        </select>
+        <input type="submit" value="검색">
+    </form>
+
+    <form id="formTable" action="/product/prodsModify" method="post">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>선택</th>
+                <th>고객번호</th>
+                <th>아이디</th>
+                <th>비밀번호</th>
+                <th>고객명</th>
+                <th>성별</th>
+                <th>생일</th>
+                <th>수정</th>
+                <th>삭제</th>
+            </tr>
+        </thead>
+        <tbody>
+            <th:block th:each="member : ${list}">
+            <tr>
+                <td><input type="checkbox" name="chkMno" th:value="${member.mid}"></td>
+                <td th:text="${member.mid}">상품번호</td>
+                <td th:text="${member.id}"></td>
+                <td th:text="${member.pw}"></td>
+                <td th:text="${member.name}"></td>
+                <td th:text="${member.gender}"></td>
+                <td th:text="${member.birthday}"></td>
+                <td><a class="btn btn-info btn-sm" th:href="@{/templates/test/member/memModify(mid=${member.mid})}">수정</a></td>
+                <td><a class="btn btn-danger btn-sm" th:href="@{/templates/test/member/memDel(mid=${member.mid})}">삭제</a></td>
+            </tr>
+            </th:block>
+        </tbody>
+    </table>
+<!--        <input type="hidden" name="in_price">-->
+    </form>
+
+    <a href="/member/memRegister" class="btn btn-success">회원 등록하기</a>
+<!--    <button class="btn btn-secondary" type="button" onclick="onDelete()">선택 삭제</button>-->
+<!--    <button class="btn btn-secondary" type="button" onclick="onModify()">선택 수정</button>-->
+
+</div>
+<!-- 푸터 -->
+<th:block th:replace="/include/fragments :: footerFragment"></th:block>
+<script>
+        // chkBoxes에 각 chkBox가 체크 되어 있는지 확인하기
+        // for(let chkBox of chkBoxes){
+        //     if(chkBox.checked){ // 체크되어 있으면 true, 아니면 false
+        //         cnt++;
+        //     }
+        // }
+
+        // 삭제할 상품 체크여부 확인 메세지
+    //     if (cnt == 0) {
+    //         alert("삭제할 상품을 체크하세요!!");
+    //         return;
+    //     }
+    //
+    //     formObj.submit();
+    // }
+
+    // 생년월일 표준(ISO)날짜로 적용하기
+    let today = new Date();
+        console.log("오늘 날짜:" + today);
+        console.log(today.toISOString());
+        console.log(today.toISOString().slice(0,10));
+
+    let preDate = new Date('1900-01-01');
+        console.log(preDate.toISOString().slice(0,10));
+
+        document.getElementById('s_date').value = preDate.toISOString().slice(0, 10);
+        document.getElementById('e_date').value = today.toISOString().slice(0, 10);
+
+
+</script>
+</body>
+</html>

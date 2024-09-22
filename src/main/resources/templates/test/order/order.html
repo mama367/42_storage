@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!-- 헤더 -->
+<th:block th:replace="/include/fragments :: headerFragment"></th:block>
+<!-- 컨텐츠 영역 -->
+<div class="container">
+    <h3 class="mt3">상품 주문 리스트</h3>
+
+    <form action="/order/search" method="post">
+        주문일자<input type="date" id="s_date" name="s_date"> ~ <input type="date" id="e_date" name="e_date">
+        <input type="text" name="pname" placeholder="상품명">
+        <input type="text" name="name" placeholder="고객명">
+        <!--        <select name="gender">-->
+        <!--            <option value="All">전체</option>-->
+        <!--            <option value="남">남</option>-->
+        <!--            <option value="여">여</option>-->
+        <!--        </select>-->
+
+        <input type="submit" value="검색">
+    </form>
+
+    <form id="formTable" action="/product/prodsModify" method="post">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>선택</th>
+                <th>주문번호</th>
+                <th>상품번호</th>
+                <th>상품명</th>
+                <th>가격</th>
+                <th>회원ID</th>
+                <th>회원명</th>
+                <th>주문일자</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="prod : ${list}">
+                <td><input type="checkbox" name="chkOrderNo" th:value="${prod.getOid()}"></td>
+                <td th:text="${prod.getOid()}">주문번호##</td>
+                <td th:text="${prod.getPno()}">상품No</td>
+                <td th:text="${prod.getPname()}">상품명</td>
+                <td th:text="${prod.getPrice()}">가격</td>
+                <td th:text="${prod.getId()}">고객ID</td>
+                <td th:text="${prod.getName()}">고객명</td>
+                <td th:text="${prod.getIn_date()}">주문일자</td>
+            </tr>
+            </tbody>
+        </table>
+        <!--        <input type="hidden" name="in_price">-->
+    </form>
+
+</div>
+<!-- 푸터 -->
+<th:block th:replace="/include/fragments :: footerFragment"></th:block>
+<script>
+    // 생년월일 표준(ISO)날짜로 적용하기
+    let today = new Date();
+    console.log(today);
+    console.log(today.toISOString());
+    console.log(today.toISOString().slice(0,10));
+
+    let now = new Date();
+    let preDate = new Date(now.setDate(now.getDate() - 100));
+
+    // let preDate = new Date('1900-01-01');
+    //     console.log(preDate.toISOString().slice(0,10));
+
+    document.getElementById('s_date').value = preDate.toISOString().slice(0, 10);
+    document.getElementById('e_date').value = today.toISOString().slice(0, 10);
+
+
+</script>
+</body>
+</html>

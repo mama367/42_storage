@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<!-- Thymeleaf Template -->
+<div class="card me-2" style="width:200px">
+    <!-- 사진 업로드 -->
+    <a th:href="@{/UprodView(pnum=${pDto.productNo}, pcontent=${pDto.pcontent})}" style="height:120px;overflow:hidden">
+        <img th:src="@{/images/{imageName}(imageName=${pDto.PImage})}" width="220px" alt="상품 이미지"/>
+    </a>
+    <div class="card-body">
+        <h5 class="card-title"><b>상품명 : <span th:text="${pDto.productNo}"></span></b></h5>
+        <p class="card-text">가격 : <span th:text="${#numbers.formatDecimal(pDto.price, 0, 'COMMA')}"></span></p> <!-- 천단위로 변경 -->
+<!--        <p class="card-text">포인트 : <span th:text="${#numbers.formatDecimal(pDto.point, 0, 'COMMA')}"></span></p> &lt;!&ndash; 천단위로 변경 &ndash;&gt;-->
+
+        <!-- 로그인이 되어있을 경우 -->
+        <div th:if="${session.loginDTO != null}">
+            <a th:href="@{/addCart(productNo=${pDto.productNo}, productQty=1, pcontent=${pDto.pcontent})}"
+               class="btn btn-primary" style="width:100%">장바구니 담기</a>
+        </div>
+        <!-- 로그인이 안 되어있을 경우 -->
+        <div th:if="${session.loginDTO == null}">
+            <a href="javascript:alert('로그인이 필요합니다')"
+               class="btn btn-primary" style="width:100%">장바구니 담기</a>
+        </div>
+    </div>
+</div>

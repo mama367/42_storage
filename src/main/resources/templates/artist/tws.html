@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Artist Page</title>
+    <!-- Slick Carousel CSS -->
+    <link rel="stylesheet" type="text/css" href="/css/slick/slick.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/slick/slick-theme.css"/>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" type="text/css" href="/css/styles.css">
+    <style>
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .main-content {
+            position: relative;
+            width: fit-content;
+            margin: 0 auto;
+        }
+        .main-photo {
+            width: 100%;
+            display: block;
+        }
+        .thumbnail-container {
+            display: flex;
+            justify-content: center;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            gap: 20px;
+        }
+        .thumbnail {
+            width: 150px;
+            height: auto;
+            cursor: pointer;
+            border: 2px solid white;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+        }
+        .product-thumbnails {
+            margin: 20px auto;
+            max-width: 90%;
+            text-align: center; /* 버튼 가운데 정렬을 위해 추가 */
+        }
+        .demo-slider {
+            display: flex;
+            overflow-x: auto;
+            white-space: nowrap;
+            gap: 10px;
+        }
+        .demo-slider .item {
+            display: inline-block;
+        }
+        .demo-slider img {
+            width: 150px;
+            height: auto;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+        }
+        .view-all-button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: cornflowerblue;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            display: inline-block;
+            cursor: pointer;
+        }
+        .footer {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+        .board-section {
+            width: 45%;
+        }
+        .board-section h3 {
+            margin-bottom: 10px;
+        }
+        .board-section ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .board-section li {
+            margin-bottom: 5px;
+        }
+        .board-button {
+            display: block;
+            margin-top: 10px;
+            padding: 10px;
+            text-align: center;
+            background-color: cornflowerblue;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<!-- 헤더 -->
+<th:block th:replace="/include/fragments :: headerFragment"></th:block>
+
+<!-- 아티스트 페이지 콘텐츠 -->
+<div class="header">
+    <h1>TWS Page</h1>
+</div>
+<div class="main-content">
+    <img src="/artist_img/twsmain.jpg" alt="아티스트 메인 사진" class="main-photo">
+    <div class="thumbnail-container">
+        <a href="https://open.spotify.com/artist/4GgBKgxhc649frZDHcXIEz" target="_blank">
+            <img src="/artist_img/tws1.jpg" alt="아티스트 이미지" class="thumbnail">
+        </a>
+        <a href="https://news.jtbc.co.kr/article/article.aspx?news_id=NB12161457" target="_blank">
+            <img src="/artist_img/tws3.jpg" alt="아티스트 크롭링(가능 시)" class="thumbnail">
+        </a>
+        <a href="https://youtu.be/NRgZuuwD2WY?si=Qf-dM0Zw-W5D9-Ml" target="_blank">
+            <img src="/artist_img/tws2.jpg" alt="아티스트 동영상" class="thumbnail">
+        </a>
+    </div>
+</div>
+
+<!-- 상품 썸네일 슬라이더 -->
+<div class="product-thumbnails">
+    <h3>상품 게시판</h3>
+    <div class="demo-slider">
+        <div class="item">
+            <a href="/artist/shop">
+                <img src="/artist_img/pro1.png" alt="상품 1">
+            </a>
+        </div>
+        <div class="item">
+            <a href="/artist/shop">
+                <img src="/artist_img/pro2.png" alt="상품 2">
+            </a>
+        </div>
+        <div class="item">
+            <a href="/artist/shop">
+                <img src="/artist_img/pro3.png" alt="상품 3">
+            </a>
+        </div>
+        <div class="item">
+            <a href="/artist/shop">
+                <img src="/artist_img/pro4.webp" alt="상품 4">
+            </a>
+        </div>
+        <div class="item">
+            <a href="/artist/shop">
+                <img src="/artist_img/pro5.gif" alt="상품 5">
+            </a>
+        </div>
+    </div>
+    <a href="/artist/shop" class="view-all-button">상품 전체 보기</a>
+</div>
+
+<div class="footer">
+    <div class="board-section">
+        <h3>공지 게시판</h3>
+        <ul>
+            <li><a href="/board_list.jsp?notice=1">[Notice] 00 크롭링에 관해 공지!</a></li>
+            <li><a href="/board_list.jsp?notice=2">[Notice] 00 커뮤니티 오픈 및 이용안내</a></li>
+            <li><a href="/board_list.jsp?notice=3">[artist] 기입 직접 메세지</a></li>
+        </ul>
+        <a href="/board_list.jsp?board=notice" class="board-button">공지 보러가기</a>
+    </div>
+    <div class="board-section">
+        <h3>커뮤니티 게시판</h3>
+        <ul>
+            <li><a href="/board_list.jsp?community=1">[게시] 00 날짜 무얼 남긴다</a></li>
+            <li><a href="/board_list.jsp?community=2">[게시] 00 공식 속성 운영 안내</a></li>
+            <li><a href="/board_list.jsp?community=3">[게시] 업데이트에 00까지 주요 안내 사항</a></li>
+        </ul>
+        <a href="/board_list.jsp?board=community" class="board-button">커뮤니티 합류하기</a>
+    </div>
+</div>
+
+<!-- 푸터 -->
+<th:block th:replace="/include/fragments :: footerFragment"></th:block>
+
+<!-- jQuery 및 Slick Carousel JS -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script type="text/javascript" src="/js/slick/slick.min.js"></script>
+<script type="text/javascript" src="/js/02.js"></script>
+</body>
+</html>

@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mbc.day03.domain.BoardDAO">
+    <!-- 게시글 등록 -->
+    <insert id="insert" parameterType="BoardDTO">
+        INSERT INTO board(subject, contents, writer)
+        VALUES(#{subject}, #{contents}, #{writer})
+    </insert>
+
+    <!-- 게시글 등록 -->
+    <insert id="insert2" parameterType="BoardDTO">
+        INSERT INTO board(btype, gno, subject, contents, writer)
+        VALUES(#{btype}, #{gno}, #{dto.subject}, #{dto.contents}, #{dto.writer})
+    </insert>
+
+    <sql id="criteria">
+        <!-- 제목 검색
+            Oracle 문자열 결합 : ||
+            MySQL 문자열 결합 : CONCAT()
+
+            'S'문자열 변환이 없으면 ascii(숫자)로 인식
+            Numberformat 예외 발생
+          -->
+        <if test="searchType == 'S'.toString()">
+            WHERE (subject LIKE CONCAT('%',#{keyword},'%'))
+        </if>
+        <!-- 내용 검색 -->
+        <if test="searchType == 'C'.toString()">
+            WHERE (contents LIKE CONCAT('%',#{keyword},'%'))
+        </if>
+        <!-- 글쓴이 검색 -->
+        <if test="searchType == 'W'.toString()">
+            WHERE (writer LIKE CONCAT('%',#{keyword},'%'))
+        </if>
+
+        <if test="searchType == 'SC'.toString()">
+            WHERE (subject LIKE CONCAT('%',#{keyword},'%')
+            OR contents LIKE CONCAT('%',#{keyword},'%'))
+        </if>
+
+        <if test="searchType == 'SW'.toString()">
+            WHERE (subject LIKE CONCAT('%',#{keyword},'%')
+            OR writer LIKE CONCAT('%',#{keyword},'%'))
+        </if>
+
+        <if test="searchType == 'SCW'.toString()">
+            WHERE (subject LIKE CONCAT('%',#{keyword},'%')
+            OR contents LIKE CONCAT('%',#{keyword},'%')
+            OR writer LIKE CONCAT('%',#{keyword},'%'))
+        </if>
+    </sql>
+
+    <!-- ** 코드 추가됨 -->
+    <sql id="criteria3">
+        <!-- 제목 검색
+            Oracle 문자열 결합 : ||
+            MySQL 문자열 결합 : CONCAT()
+
+            'S'문자열 변환이 없으면 ascii(숫자)로 인식
+            Numberformat 예외 발생
+          -->
+        <if test="searchType == 'S'.toString()">
+            AND (subject LIKE CONCAT('%',#{keyword},'%'))
+        </if>
+        <!-- 내용 검색 -->
+        <if test="searchType == 'C'.toString()">
+            AND (contents LIKE CONCAT('%',#{keyword},'%'))
+        </if>
+        <!-- 글쓴이 검색 -->
+        <if test="searchType == 'W'.toString()">
+            AND (writer LIKE CONCAT('%',#{keyword},'%'))
+        </if>
+
+        <if test="searchType == 'SC'.toString()">
+            AND (subject LIKE CONCAT('%',#{keyword},'%')
+            OR contents LIKE CONCAT('%',#{keyword},'%'))
+        </if>
+
+        <if test="searchType == 'SW'.toString()">
+            AND (subject LIKE CONCAT('%',#{keyword},'%')
+            OR writer LIKE CONCAT('%',#{keyword},'%'))
+        </if>
+
+        <if test="searchType == 'SCW'.toString()">
+            AND (subject LIKE CONCAT('%',#{keyword},'%')
+            OR contents LIKE CONCAT('%',#{keyword},'%')
+            OR writer LIKE CONCAT('%',#{keyword},'%'))
+        </if>
+    </sql>
+
+    <!-- **코드 변경됨 -->
+    <sql id="criteria2">
+        <!-- 제목 검색
+            Oracle 문자열 결합 : ||
+            MySQL 문자열 결합 : CONCAT()
+
+            'S'문자열 변환이 없으면 ascii(숫자)로 인식
+            Numberformat 예외 발생
+          -->
+        <if test="pDto.searchType == 'S'.toString()">
+            AND (subject LIKE CONCAT('%',#{pDto.keyword},'%'))
+        </if>
+        <!-- 내용 검색 -->
+        <if test="pDto.searchType == 'C'.toString()">
+            AND (contents LIKE CONCAT('%',#{pDto.keyword},'%'))
+        </if>
+        <!-- 글쓴이 검색 -->
+        <if test="pDto.searchType == 'W'.toString()">
+            AND (writer LIKE CONCAT('%',#{pDto.keyword},'%'))
+        </if>
+
+        <if test="pDto.searchType == 'SC'.toString()">
+            AND (subject LIKE CONCAT('%',#{pDto.keyword},'%')
+            OR contents LIKE CONCAT('%',#{pDto.keyword},'%'))
+        </if>
+
+        <if test="pDto.searchType == 'SW'.toString()">
+            AND (subject LIKE CONCAT('%',#{pDto.keyword},'%')
+            OR writer LIKE CONCAT('%',#{pDto.keyword},'%'))
+        </if>
+
+        <if test="pDto.searchType == 'SCW'.toString()">
+            AND (subject LIKE CONCAT('%',#{pDto.keyword},'%')
+            OR contents LIKE CONCAT('%',#{pDto.keyword},'%')
+            OR writer LIKE CONCAT('%',#{pDto.keyword},'%'))
+        </if>
+    </sql>
+
+    <select id="getList" resultType="BoardDTO">
+        SELECT * FROM board
+        <include refid="criteria"/>
+        ORDER BY bid DESC
+        LIMIT #{startIndex}, #{cntPerPage}
+    </select>
+
+    <!-- ** 아티스트 게시판의 변수 gno, btype의 추가로 인한 pDto 오류로 인해 코드 변경함 -->
+    <select id="getListByArtist" resultType="BoardDTO">
+        SELECT * FROM board
+        WHERE btype = #{btype}
+        AND gno = #{gno}
+        <include refid="criteria2"/>
+        ORDER BY bid DESC
+        LIMIT #{pDto.startIndex}, #{pDto.cntPerPage}
+    </select>
+
+    <select id="getTopListByArtist" resultType="BoardDTO">
+        SELECT * FROM board
+        WHERE btype = #{btype}
+        AND gno = #{gno}
+        ORDER BY bid DESC
+        LIMIT 3
+    </select>
+
+    <!-- 게시글 상세보기 -->
+    <select id="view" resultType="BoardDTO">
+        SELECT * FROM board WHERE bid = #{bid}
+    </select>
+
+    <!-- 게시글 상세보기 -->
+    <select id="artistBoardView" resultType="BoardDTO">
+        SELECT * FROM board
+        WHERE bid = #{bid}
+        AND gno = #{gno}
+    </select>
+
+    <!-- 게시글 수정하기 -->
+    <update id="update">
+        UPDATE board SET subject=#{subject}, contents=#{contents}
+        WHERE bid = #{bid}
+    </update>
+
+    <!-- 게시글 삭제하기 -->
+    <delete id="delete">
+        DELETE FROM board WHERE bid = #{bid}
+    </delete>
+
+    <!-- 조회수 추가하기 -->
+    <update id="hitAdd">
+        UPDATE board SET hit = hit + 1
+        WHERE bid=#{bid}
+    </update>
+
+    <!-- 검색어 있을 때 전체 게시글 수 -->
+    <!--<select id="totalCnt" resultType="Integer">
+        SELECT count(*) FROM board
+        <include refid="criteria"/>
+    </select>-->
+
+    <!-- 검색어 있을 때 전체 게시글 수 -->
+    <select id="totalCnt" resultType="Integer">
+        SELECT count(*) FROM board
+        <include refid="criteria"/>
+    </select>
+
+    <!-- ** 아티스트 게시판의 총 글 갯수를 받아오기 위한 코드 추가 -->
+    <select id="totalCnt2" resultType="Integer">
+        SELECT count(*) FROM board
+        WHERE btype=#{btype}
+        AND gno=#{gno}
+        <include refid="criteria3"/>
+    </select>
+
+    <!-- 댓글 추가/삭제 시 replyCnt값을 수정 -->
+    <update id="updateReplyCnt">
+        UPDATE board SET replyCnt = replyCnt + #{n}
+        WHERE bid=#{bid}
+    </update>
+
+
+</mapper>
+

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>카테고리별 상품 리스트</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+    <style>
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            background-color: #e6e6fa;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .card-img-top {
+            object-fit: cover;
+            height: 200px;
+            width: 100%;
+        }
+        .row {
+            gap: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header -->
+<th:block th:replace="/include/fragments :: headerFragment"></th:block>
+
+<!-- 카테고리 선택 헤더 -->
+<div class="header">
+    <h1>카데고리 리스트</h1>
+    <a th:href="@{/artist/shop}" class="btn btn-sm btn-outline-primary">전체보기</a>
+</div>
+
+<!-- 카테고리별 상품 리스트 -->
+<div class="container">
+    <div class="row row-cols-1 row-cols-md-4 g-4">
+        <!-- 상품 반복 출력 -->
+        <div th:each="product : ${productList}" class="col">
+            <div class="card h-100">
+                <img th:src="@{'/images/' + ${product.image}}" class="card-img-top" alt="상품 이미지">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${product.name}">상품명</h5>
+                    <p class="card-text" th:text="${product.price} + '원'">가격</p>
+
+
+                    <!-- 상세보기 버튼 -->
+                    <a th:href="@{/artist/UprodView.do(no=${product.no})}" class="btn btn-primary">상세보기</a>
+                    <!-- 장바구니 담기 버튼 -->
+                    <a type="button" th:href="@{/cart/addCart2.do(productNo=${product.no}, productQty=1, userID=${session.userId})}" class="btn btn-sm btn-primary">장바구니 담기</a>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<th:block th:replace="/include/fragments :: footerFragment"></th:block>
+
+</body>
+</html>

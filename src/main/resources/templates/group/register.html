@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!-- 헤더 -->
+<th:block th:replace="/include/fragments :: headerFragment"></th:block>
+
+<!-- 컨텐츠 영역 -->
+<div class="container w-50 mt-3">
+    <h3>그룹 등록</h3>
+    <form enctype="multipart/form-data" \action="/group/register" method="post">
+        <p><input class="form-control" type="text" id="no" name="no" placeholder="그룹 번호"></p>
+        <p><input class="form-control" type="text" id="name" name="name" placeholder="그룹 명"></p>
+        <p><input class="form-control" type="text" id="debut" name="debut" placeholder="데뷔날"></p>
+        <p><input class="form-control" type="text" id="info" name="info" placeholder="그룹 정보"></p>
+        <p><input class="form-control" type="file" id="image" name="image" placeholder="이미지 등록"></p>
+        <p><input class="form-control" type="text" id="message" name="message" placeholder="그룹 한마디"></p>
+        <p><input type="submit" class="btn btn-success" value="등록"></p>
+    </form>
+</div>
+
+
+<!-- 푸터 -->
+<th:block th:replace="/include/fragments :: footerFragment"></th:block>
+
+</body>
+</html>

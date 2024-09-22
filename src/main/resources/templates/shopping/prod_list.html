@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>상품 리스트</title>
+    <link rel="stylesheet" href="/path/to/your/css/bootstrap.min.css"> <!-- Bootstrap CSS 링크 -->
+</head>
+<body>
+<!-- 헤더 포함 -->
+<th:block th:replace="/include/fragments :: headerFragment"></th:block>
+
+<div class="container mt-5">
+    <h3>상품 리스트</h3><br>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>상품번호</th>
+            <th>카테고리 코드</th>
+            <th>상품명</th>
+            <th>상품가격</th>
+            <th>상품이미지</th>
+            <th>그룹</th>
+            <th>설명</th>
+            <th>신고횟수</th>
+            <th>별점</th>
+            <th>상세보기</th>
+            <th>수정</th>
+            <th>삭제</th>
+        </tr>
+        </thead>
+        <tbody>
+        <th:block th:each="product : ${list}"> <!-- 모델 속성명 수정 -->
+            <tr>
+                <td th:text="${product.getNo()}"></td>
+                <td th:text="${product.getCategoryNo}"></td>
+                <td th:text="${product.getName()}"></td>
+                <td th:text="${product.getPrice()}"></td>
+                <td class="d-flex justify-content-center">
+                    <img th:src="@{'/images/' + ${product.getImage()}}"
+                         style="height:50px;" alt="아티스트 이미지">
+                </td>
+                <th:block th:each="group : ${groupList}">
+                    <td th:if="${group.get('no') == product.getGroupNo()}" th:text="${group.get('name')}"></td>
+                </th:block>
+                <td th:text="${product.getPcontent()}"></td>
+                <td th:text="${product.getReport()}"></td>
+                <td th:text="${product.getScore()}"></td>
+                <td>
+                    <a th:href="@{/shopping/UprodView.do(No=${product.getNo()})}" class="btn btn-info btn-sm">상세보기</a>
+
+                </td>
+                <td>
+                    <a th:href="@{/shopping/prodUpdate(no=${product.getNo()})}" class="btn btn-warning btn-sm">수정</a>
+                </td>
+                <td>
+                    <form th:action="@{/shopping/deleteShopping}" method="post" style="display:inline;">
+                        <input type="hidden" name="no" th:value="${product.getNo()}"/> <!-- 소문자로 수정 -->
+                        <input type="hidden" name="image" th:value="${product.getImage()}"/> <!-- 이미지 경로 추가 -->
+                        <button type="submit" class="btn btn-danger btn-sm">삭제</button>
+                    </form>
+                </td>
+            </tr>
+        </th:block>
+        </tbody>
+    </table>
+    <a th:href="@{/shopping/prodInput}" class="btn btn-primary">상품 등록</a>
+</div>
+
+
+<!-- 푸터 포함 -->
+<th:block th:replace="/include/fragments :: footerFragment"></th:block>
+
+<script src="/path/to/your/js/bootstrap.bundle.min.js"></script> <!-- Bootstrap JS 링크 -->
+</body>
+</html>

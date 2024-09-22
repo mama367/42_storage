@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>상품 목록</title>
+    <!-- Header Fragment -->
+    <th:block th:replace="/include/fragments :: headerFragment"></th:block>
+</head>
+<body>
+<div class="w-75 ps-5">
+    <!-- 상품 제목 -->
+    <h3 th:text="'[' + ${pcontent} + '] ' + ${pcontentName} + ' 상품'"></h3><br>
+
+    <!-- 상품이 없는 경우 -->
+    <div th:if="${#lists.isEmpty(sList)}">
+        <br th:text="'[' + ${pcontent} + '] ' + ${pcontentName} + ' 상품이 없습니다!!'"></br>
+    </div>
+
+    <!-- 상품이 있는 경우 -->
+    <div th:if="${!#lists.isEmpty(sList)}">
+        <div class="d-flex">
+            <!-- 4개마다 줄을 바꿈 -->
+            <div th:each="pDto, iterStat : ${sList}">
+                <!-- 4번째 요소마다 줄을 바꿈 -->
+                <div th:if="${iterStat.index % 4 == 0}" th:unless="${iterStat.index == 0}">
+                </div>
+                <div class="d-flex mt-3">
+                </div>
+
+                <!-- Card -->
+                <div th:replace="card :: cardFragment" th:with="dto=${pDto}"></div>
+                <!-- Card End -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer Fragment -->
+<th:block th:replace="/include/fragments :: footerFragment"></th:block>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>상품 리스트</title>
+    <!-- Bootstrap CSS 링크 추가 -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css"> <!-- 실제 경로로 수정 -->
+</head>
+<body>
+<!-- 헤더 포함 -->
+<th:block th:replace="/include/fragments :: headerFragment"></th:block>
+
+<div class="container w-75 mt-5">
+    <h3 th:text="'[' + ${cat_name} + '] 상품'"></h3><br>
+
+    <!-- 카테고리 리스트가 비어있는 경우 메시지 출력 -->
+    <th:block th:if="${#lists.isEmpty(cList)}">
+        <p th:text="${cat_name} + ' 상품이 존재하지 않습니다!!'"></p>
+    </th:block>
+
+    <!-- 카테고리 리스트가 존재하는 경우 상품 나열 -->
+    <th:block th:unless="${#lists.isEmpty(cList)}">
+        <div class="d-flex flex-wrap">
+            <!-- 상품 리스트 반복 출력 -->
+            <th:block th:each="pDto, iterStat : ${cList}">
+                <!-- 카드 그룹의 첫 번째 카드가 아닌 경우, 열 구분 추가 -->
+                <th:block th:if="${iterStat.index % 4 == 0}" th:unless="${iterStat.index == 0}">
+                    <!-- 닫히지 않은 div 닫기 -->
+                    <div class="d-flex flex-wrap"> <!-- 새 열 시작 -->
+                </th:block>
+
+                <!-- 카드 -->
+                <div class="card" style="width: 18rem; margin: 1rem;">
+                    <!-- pDto.PImage가 null인 경우 대체 이미지 사용 -->
+                    <th:block th:if="${pDto.PImage != null}">
+                        <img th:src="@{'/images/' + ${pDto.PImage}}" class="card-img-top" alt="상품 이미지" />
+                    </th:block>
+                    <th:block th:unless="${pDto.PImage != null}">
+                        <img th:src="@{'/path/to/default/image.jpg'}" class="card-img-top" alt="상품 이미지" />
+                    </th:block>
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${pDto.Nm}"></h5>
+                        <p class="card-text" th:text="${pDto.pcontent}"></p>
+                        <a th:href="@{/shopping/UprodView.do(No=${pDto.No})}" class="btn btn-info">상세보기</a>
+                        <a th:href="@{/shopping/prodUpdate(No=${pDto.No})}" class="btn btn-warning">수정</a>
+                    </div>
+                </div>
+                <!-- 카드 End -->
+
+                <!-- 카드 그룹의 마지막 카드일 때, 열 구분 추가 -->
+                <th:block th:if="${iterStat.index % 4 == 3}">
+                    <!-- 닫히지 않은 div 닫기 -->
+        </div> <!-- 전체 카드 그룹 div 닫기 -->
+    </th:block>
+    </th:block>
+</div>
+</th:block>
+</div>
+
+<!-- 푸터 포함 -->
+<th:block th:replace="/include/fragments :: footerFragment"></th:block>
+
+</body>
+</html>

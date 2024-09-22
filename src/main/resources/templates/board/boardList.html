@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:replace="/include/fragments :: headerFragment"></th:block>
+
+<!-- <div class="container w-75 mt-5 p-5 shadow"> -->
+<div class="container ms-5">
+      <h3 class="text-center">Spring Board</h3><br>   
+              
+                <!-- 검색 -->
+              	<div>
+              		<form action="/artistBoard.do" id="searchForm" method="post">
+              			<input type="hidden" name="cntPerPage" th:value="${pDto.cntPerPage}"/>
+              			<input type="hidden" id="gno" name="gno" th:value="${gno}"/>
+              			<input type="hidden" id="btype" name="btype" th:value="${btype}"/>
+	              			<div class="d-flex justify-content-center"> <!-- end 는 맨 왼쪽 -->
+	              				<!-- 선택박스 -->							<!-- me-2 사이 띄기 -->
+		              			<select class="form-select form-select-sm me-2" th:id="searchType" name="searchType" style="width:120px">
+									 <option th:value="${null}">선택</option>
+									 <option th:value="${'S'}" th:selected="${pDto.searchType} == 'S'">제목</option>
+									 <option th:value="${'C'}" th:selected="${pDto.searchType} == 'C'">내용</option>
+									 <option th:value="${'W'}" th:selected="${pDto.searchType} == 'W'">작성자</option>
+									 <option th:value="${'SC'}" th:selected="${pDto.searchType} == 'SC'">제목 + 내용</option>
+									 <option th:value="${'SW'}" th:selected="${pDto.searchType} == 'SW'">제목 + 작성자</option>
+									 <option th:value="${'CW'}" th:selected="${pDto.searchType} == 'CW'">작성자 + 내용</option>
+									 <option th:value="${'SCW'}" th:selected="${pDto.searchType} == 'SCW'">제목 + 내용 + 작성자</option>
+		              			</select>
+		              			<!-- 검색창 -->
+		              			<input type="text" th:id="keyword" name="keyword" placeholder="검색어 입력"
+		              					style="width:300px" class="form-control rounded-0 rounded-start" th:value="${pDto.keyword}">
+		              			<!-- 검색OK 버튼 -->
+		              			<button class="btn rounded-0 rounded-end" style="background:#138499; color:white">
+									<th:block th:if="${pDto.searchType == null || pDto.searchType == ''}">
+									</th:block>
+		              				<i class="fa fa-search"></i>
+		              			</button>
+	              			</div>
+              		</form>
+              	</div>
+              
+              <!-- 현재 페이지 / 총페이지 확인 -->
+              <div class="my-3 d-flex justify-content-between">
+              	<div class="ms-1">&nbsp;<b th:text="${pDto.viewPage}"></b> / [[${pDto.totalPage}]] Pages</div>
+
+      				<!-- 게시글수 선택-->
+      				<!-- 검색이 없는 경우 -->
+      			<th:block th:if="${pDto.searchType} == null or ${pDto.searchType} == ''">
+	              	<div class="me-3">
+	              		<select class="form-select form-select-sm" th:id="cntPerPage">
+	              			<option th:value="5" th:selected="${pDto.cntPerPage == 5}">게시글 5개</option>
+	              			<option th:value="10" th:selected="${pDto.cntPerPage == 10}">게시글 10개</option>
+	              			<option th:value="20" th:selected="${pDto.cntPerPage == 20}">게시글 20개</option>
+	              			<option th:value="30" th:selected="${pDto.cntPerPage == 30}">게시글 30개</option>
+	              			<option th:value="50" th:selected="${pDto.cntPerPage == 50}">게시글 50개</option>
+	              		</select>
+	              	</div>
+              	</th:block>
+              	      				<!-- 검색이 있는 경우 -->
+              	<th:block th:if="${pDto.searchType} != null and ${pDto.searchType} != ''">
+	              	<div class="me-3">
+						<select class="form-select form-select-sm" th:id="cntPerPage">
+		              			<th:block th:if="${pDto.totalCnt} <= 5">
+                    				<option th:value="5" th:selected="${pDto.cntPerPage == 5}">선택없음</option>
+                  				</th:block>
+			              		<th:block th:if="${pDto.totalCnt} > 5 and ${pDto.totalCnt} < 10">
+									<option th:value="5" th:selected="${pDto.cntPerPage == 5}">게시글 5개</option>
+			              		</th:block>
+			              		<th:block th:if="${pDto.totalCnt} > 10 and ${pDto.totalCnt} < 20">
+									<option th:value="5" th:selected="${pDto.cntPerPage == 5}">게시글 5개</option>
+									<option th:value="10" th:selected="${pDto.cntPerPage == 10}">게시글 10개</option>
+			              		</th:block>
+			              		<th:block th:if="${pDto.totalCnt} >= 20 and ${pDto.totalCnt} < 30">
+									<option th:value="5" th:selected="${pDto.cntPerPage == 5}">게시글 5개</option>
+									<option th:value="10" th:selected="${pDto.cntPerPage == 10}">게시글 10개</option>
+									<option th:value="20" th:selected="${pDto.cntPerPage == 20}">게시글 20개</option>
+			              		</th:block>
+			              		<th:block th:if="${pDto.totalCnt} >= 30 and ${pDto.totalCnt} < 50">
+									<option th:value="5" th:selected="${pDto.cntPerPage == 5}">게시글 5개</option>
+									<option th:value="10" th:selected="${pDto.cntPerPage == 10}">게시글 10개</option>
+									<option th:value="20" th:selected="${pDto.cntPerPage == 20}">게시글 20개</option>
+									<option th:value="30" th:selected="${pDto.cntPerPage == 30}">게시글 30개</option>
+			              		</th:block>
+			              		<th:block th:if="${pDto.totalCnt} >= 50">
+									<option th:value="5" th:selected="${pDto.cntPerPage == 5}">게시글 5개</option>
+									<option th:value="10" th:selected="${pDto.cntPerPage == 10}">게시글 10개</option>
+									<option th:value="20" th:selected="${pDto.cntPerPage == 20}">게시글 20개</option>
+									<option th:value="30" th:selected="${pDto.cntPerPage == 30}">게시글 30개</option>
+									<option th:value="50" th:selected="${pDto.cntPerPage == 50}">게시글 50개</option>
+			              		</th:block>
+	              		</select>
+	              		
+	              	</div>
+              	</th:block>
+              </div>
+              
+        <!-- 실제 게시판 -->
+		<table class="table">
+		   <thead class="table-dark">
+		      <tr>
+		         <th>번호</th>
+		         <th>제목</th>
+		         <th>글쓴이</th>
+		         <th>등록일</th>
+		         <th>조회수</th>
+		         <th>삭제</th>
+		      </tr>
+		   </thead>
+		   <!-- 
+		   		XSS(cross-site Scripting 공격: 웹사이트에 스크립트 코드를 주입시켜서 공격하는 해킹 기법)
+		   		JSP에서 XSS 공격 차단하는 방법
+		   		<%-- <c:out /> --%>를 사용하여 입력된 테그를 브라우저가 인식하지 못하도록 문자열로 변환시켜서 방어를 함
+		    -->
+		   <tbody>
+				<th:block th:each="dto : ${list}">
+					<tr>
+						<td>[[${dto.bid}]]</td>
+						<td><a th:href="@{/boardView.do(bid=${dto.bid}, viewPage=${pDto.viewPage}, searchType=${pDto.searchType}, keyword=${pDto.keyword}, cntPerPage=${pDto.cntPerPage})}">
+							[[${dto.subject}]]</a><b>[댓글 : [[${dto.replyCnt}]]]</b></td>
+						<td>[[${dto.writer}]]</td>
+						<td>[[${dto.reg_date}]]</td>
+						<td>[[${dto.hit}]]</td>
+						<td>			<!-- 넘어갈때 숫자는 상관없지만 문자열로 넘어갈땐 ''를 감싸줘야 한다 '${pDto.searchType}' -->
+							<!--<input type ="button" class='btn btn-danger btn-sm' value="삭제"
+								   th:onclick="|delBoard(${dto.bid}, ${pDto.viewPage}, ${pDto.searchType}, ${pDto.keyword}, ${pDto.cntPerPage})|">-->
+							<!-- **본인 또는 관리자만 글을 삭제할 수 있도록 수정함 -->
+							<th:block th:if="${session.userPrivileges} == 0 or ${session.userId} == ${dto.writer}">
+								<a class="btn btn-danger btn-sm" th:href="@{/boardRemove.do(btype=${btype}, gno=${gno}, bid=${dto.bid}, viewPage=${pDto.viewPage}, searchType=${pDto.searchType}, keyword=${pDto.keyword}, cntPerPage=${pDto.cntPerPage})}">삭제</a>
+							</th:block>
+
+
+						</td>
+					</tr>
+				</th:block>
+				<tr>
+		         <td colspan="6" class="text-center">
+					 <th:block th:if="${btype == 0}">
+						 <th:block th:if="${session.userPrivileges == 0}">
+							 <a class="btn btn-primary my-3" th:href="@{artistBoardRegister.do(btype=${btype}, gno=${gno})}">글쓰기</a>
+						 </th:block>
+					 </th:block>
+
+					 <th:block th:if="${btype == 1}">
+						 <a class="btn btn-primary my-3" th:href="@{artistBoardRegister.do(btype=${btype}, gno=${gno})}">글쓰기</a>
+					 </th:block>
+
+
+				 </td>
+		      	</tr>
+			</tbody>
+		</table><br>
+		
+		<!-- 페이지네이션, 페이징 처리 -->
+				<ul class="pagination d-flex justify-content-center">
+										<!-- 여백 mt-상 mb-하 my-상하 / ms-좌 me-우 mx-좌우 -->
+					<li class="page-item mx-4" th:disabled="${pDto.viewPage > 1}" >  <!-- viewPage를 pDto.viewPage 1 로 하면 안됌, 고정값으로 잡힘  -->
+	    				<a class="page-link rounded-end" th:href="@{artistBoard.do(gno=${gno},btype=${btype},viewPage=1,searchType=${pDto.searchType},keyword=${pDto.keyword},cntPerPage=${pDto.cntPerPage})}">첫 페이지</a>
+	    			</li>
+	    				    			
+	    			<li class="page-item mx-4" th:disabled="${pDto.prevPage > 0} ">
+	    				<a class="page-link rounded" th:href="@{artistBoard.do(gno=${gno},btype=${btype},viewPage=${pDto.prevPage},searchType=${pDto.searchType},keyword=${pDto.keyword},cntPerPage=${pDto.cntPerPage})}">이전 페이지</a>
+	    			</li>
+
+	    			<li class="page-item" th:disabled="${pDto.viewPage > 1}">
+	    				<a class="page-link rounded-start" th:href="@{artistBoard.do(gno=${gno},btype=${btype},viewPage=${(pDto.viewPage)-1},searchType=${pDto.searchType},keyword=${pDto.keyword},cntPerPage=${pDto.cntPerPage})}"><</a>
+	    			</li>
+					<th:block th:with="blockStart=${pDto.blockStart}, blockEnd=${pDto.blockEnd}">
+						<th:block th:each="i : ${#numbers.sequence(blockStart, blockEnd)}" >
+							<li class="page-item" th:classappend="${pDto.viewPage == i ? 'active':''}">		<!-- 삼항연산자 사용 -->
+								<a class="page-link" th:href="@{artistBoard.do(gno=${gno},btype=${btype},viewPage=${i},searchType=${pDto.searchType},keyword=${pDto.keyword},cntPerPage=${pDto.cntPerPage})}">[[${i}]]</a>
+							</li>
+						</th:block>
+					</th:block>
+
+	    			
+	    			<li class="page-item" th:disabled="${pDto.viewPage < pDto.totalPage}">
+	    				<a class="page-link rounded-end" th:href="@{artistBoard.do(gno=${gno},btype=${btype},viewPage=${pDto.viewPage+1},searchType=${pDto.searchType},keyword=${pDto.keyword},cntPerPage=${pDto.cntPerPage})}">></a>
+	    			</li>
+
+	    			<li class="page-item mx-4" th:disabled="${pDto.nextPage <= pDto.totalPage}">
+	    				<a class="page-link rounded" th:href="@{artistBoard.do(gno=${gno},btype=${btype},viewPage=${pDto.nextPage},searchType=${pDto.searchType},keyword=${pDto.keyword},cntPerPage=${pDto.cntPerPage})}">다음 페이지</a>
+	    			</li>
+
+	    			<li class="page-item mx-4" th:disabled="${pDto.viewPage == pDto.totalPage}">
+	    				<a class="page-link rounded-start" th:href="@{artistBoard.do(gno=${gno},btype=${btype},viewPage=${pDto.totalPage},searchType=${pDto.searchType},keyword=${pDto.keyword},cntPerPage=${pDto.cntPerPage})}">마지막 페이지</a>
+	    			</li>
+	    		
+	  			</ul>
+
+</div>
+
+<script>
+
+	// JQuery 문
+	$("#btn-write").click( () => {
+		location.href="/boardRegister.do";
+	} )
+	
+	// 한페이지 게시글 수 onChange
+//	$("#cntPerPage").change(function(){}) // 아래 람다식으로 표현
+	$("#cntPerPage").change( () => {	// #cntPerPage option:selected -> 게시글 id의 옵션이 선택되었을때의 .val() 값
+		let cntVal = $("#cntPerPage option:selected").val(); // 이 값을 boardcontroller - boardList.do로 넘어가야함
+		let searchVal = $("#searchType option:selected").val(); // 이 값을 boardcontroller - boardList.do로 넘어가야함
+		let keywordVal = $("#keyword").val();
+		let gno = $("#gno").val();
+		let btype = $("#btype").val();
+
+		//alert(cntVal);
+		location.href="./artistBoard.do?gno="+gno+"&btype="+btype+"&viewPage=1&searchType="+searchVal+"&keyword="+keywordVal+"&cntPerPage="+cntVal;
+	} )
+
+	// 자바스크립트
+	function delBoard(bid, viewPage, searchType, keyword, cntPerPage){
+		//location.href="<c:url value='/removeBoard.do?bid=${dto.bid}&viewPage=${pDto.viewPage}&searchType=${pDto.searchType}&keyword=${pDto.keyword}'/>";
+		location.href="./boardRemove.do?bid="+bid+"&viewPage="+viewPage+"&searchType="+searchType+"&keyword="+keyword+"&cntPerPage="+cntPerPage;
+	}
+
+	
+</script>    
+
+<div th:text="${pDto.totalCnt}"></div>

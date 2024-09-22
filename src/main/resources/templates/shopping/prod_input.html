@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>상품 등록</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* 커스텀 CSS */
+        .form-container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-header {
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+            color: #495057;
+        }
+
+        .form-table td {
+            vertical-align: middle;
+        }
+
+        .btn-container {
+            margin-top: 20px;
+        }
+
+        .form-select, .form-control {
+            border-radius: 4px;
+            border: 1px solid #ced4da;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+        .btn-outline-primary {
+            border-color: #007bff;
+            color: #007bff;
+        }
+
+        .btn-outline-primary:hover {
+            background-color: #007bff;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <h2 class="form-header">상품 등록</h2>
+    <form th:action="@{/shopping/register}" method="post" enctype="multipart/form-data">
+        <table class="table form-table">
+            <tbody>
+            <tr>
+                <td>카테고리</td>
+                <td>
+                    <select class="form-select form-select-sm" name="categoryNo">
+                        <th:block th:if="${categoryList == null or #lists.isEmpty(categoryList)}">
+                            <option value="">카테고리 없음</option>
+                        </th:block>
+                        <th:block th:if="${categoryList != null and not #lists.isEmpty(categoryList)}">
+                            <th:block th:each="dto : ${categoryList}">
+                                <option th:value="${dto.ccode}" th:text="'[' + ${dto.ccode} + '] ' + ${dto.cat_name}"></option>
+                            </th:block>
+                        </th:block>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>상품명</td>
+                <td><input type="text" class="form-control form-control-sm" name="name"/></td>
+            </tr>
+            <tr>
+                <td>상품이미지</td>
+                <td><input type="file" class="form-control form-control-sm" name="image"/></td>
+            </tr>
+            <tr>
+                <td>판매자 번호</td>
+                <td><input type="text" class="form-control form-control-sm" name="userNo" th:value="${session.userNo}"/></td>
+            </tr>
+            <tr>
+                <td>상품가격</td>
+                <td><input type="text" class="form-control form-control-sm" name="price"/></td>
+            </tr>
+            <tr>
+                <td>상품 정보</td>
+                <td><input type="text" class="form-control form-control-sm" name="pcontent" /></td>
+            </tr>
+            <tr>
+                <td>아티스트 그룹</td>
+                <td>
+                    <select class="form-select form-select-sm" name="groupNo">
+                        <!-- 상품 스펙이 없을 경우 -->
+                        <option value="" th:if="${groupList.isEmpty()}">스펙 없음</option>
+
+                        <!-- 상품 스펙이 있을 경우 -->
+                        <th:block th:if="${!groupList.isEmpty()}">
+                            <th:block th:each="group : ${groupList}">
+                                <option th:value="${group.get('no')}" th:text="${group.get('name')}"></option>
+                            </th:block>
+                        </th:block>
+                    </select>
+                </td>
+            </tr>
+            <!--<tr>
+                <td>신고횟수</td>
+                <td><input type="text" class="form-control form-control-sm" name="Report" /></td>
+            </tr>
+            <tr>
+                <td>별점</td>
+                <td><input type="text" class="form-control form-control-sm" name="Score" /></td>
+            </tr>-->
+            <tr>
+                <td colspan="2" class="text-center btn-container">
+                    <input type="submit" class="btn btn-sm btn-primary" value="상품등록" />
+                    <a th:href="@{/shopping}" class="btn btn-sm btn-outline-primary">상품 리스트</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

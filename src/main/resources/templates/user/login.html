@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!-- 헤더 -->
+<th:block th:replace="/include/fragments :: headerFragment"></th:block>
+<!-- 컨텐츠 영역 -->
+<div class="container">
+    <form th:action="@{/user/login}" method="post">
+        <h2>로그인</h2>
+        <th:block th:if="${session.loginMsg != null}">
+            <p class="text-center text-danger" th:text="${session.loginMsg}"></p>
+        </th:block>
+
+        <div class="input_wrap" id="passwordChangeForm">
+            <!-- 아이디 & 비밀번호 입력창-->
+            <div class="mb-2">
+                <input class="form-control mb-2" type="text" id="id" name="id" placeholder="아이디를 입력해주세요."/>
+                <input class="form-control" type="password" id="password" name="password" placeholder="비밀번호를 입력해주세요."/>
+                <p th:if="${param.error}" class="text-danger">로그인 실패</p>
+            </div>
+
+            <!-- 로그인 & 회원가입 버튼-->
+            <div class="register_wrap">
+                <input class="btn btn-success" type="submit" value="로그인"/>
+                <a class="btn btn-info" th:href="@{/user/Agreement}">회원가입</a>
+            </div>
+        </div>
+    </form>
+</div>
+<!-- 푸터 -->
+<th:block th:replace="/include/fragments :: footerFragment"></th:block>
+</body>
+</html>

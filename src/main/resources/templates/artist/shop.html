@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>상품 리스트</title>
+<!--  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css">-->
+<!--  <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>-->
+
+  <style>
+    /* 중앙 정렬 및 간격 조정 */
+    .header {
+      text-align: center; /* 가운데 정렬 */
+      margin-bottom: 20px; /* 기본 여백 */
+      background-color: #e6e6fa; /* 연보라색 배경 */
+      padding: 20px; /* 패딩을 추가하여 내용과 경계 사이에 여백을 추가 */
+      border-radius: 8px; /* 모서리 둥글게 처리 */
+    }
+    .header + .container {
+      margin-top: 2cm; /* 배너와의 간격 설정 */
+    }
+
+    /* 상품 이미지 스타일링 */
+    .card-img-top {
+      object-fit: cover; /* 이미지가 카드의 크기에 맞게 잘리도록 설정 */
+      height: 200px; /* 원하는 높이로 설정 */
+      width: 100%; /* 카드의 전체 너비를 사용 */
+    }
+
+    /* 기본 카테고리 버튼 스타일 */
+    .category-btn {
+      background-color: lightseagreen; /* 기본 민트색 버튼 배경 */
+      color: lightseagreen; /* 버튼 텍스트 색상 */
+      font-size: 16px; /* 버튼 크기 조정 */
+      padding: 10px 20px; /* 버튼 패딩 조정 */
+      margin: 0 10px; /* 버튼 간 간격 */
+      border: none;
+      border-radius: 30px; /* 버튼을 볼록하게 만듦 */
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 버튼에 음영 추가 */
+      transition: all 0.3s ease; /* 클릭 애니메이션 효과 */
+    }
+
+    /* 버튼을 클릭했을 때 애니메이션 */
+    .category-btn:active {
+      transform: scale(0.95); /* 클릭 시 살짝 눌리는 듯한 효과 */
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* 클릭 시 그림자 변화 */
+    }
+
+    /* 버튼에 마우스를 올렸을 때 */
+    .category-btn:hover {
+      background-color: #17a2b8; /* 호버 시 버튼 색상 변화 */
+      color: white; /* 호버 시 텍스트 색상 변화 */
+      box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2); /* 호버 시 그림자 진해짐 */
+    }
+
+    /* 활성화된 카테고리 버튼 스타일 */
+    .category-btn.active {
+      background-color: #28a745; /* 활성화된 버튼 색상 */
+      color: white; /* 활성화된 버튼 텍스트 색상 */
+      box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    /* 중앙 정렬 */
+    .category-buttons {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+
+    /* 페이지네이션 중앙 정렬 */
+    .pagination {
+      justify-content: center; /* 중앙 정렬 */
+    }
+
+    /* 상세보기 버튼 스타일 */
+    .btn-detail, .btn-cart {
+      border: none;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 5px;
+      text-decoration: none;
+    }
+  </style>
+
+</head>
+<body>
+
+<!-- Header -->
+<th:block th:replace="/include/fragments :: headerFragment"></th:block>
+
+<!-- Msg 띄우기 -->
+<div th:if="${msg != null}">
+  <script>
+    alert([[${msg}]]);
+  </script>
+</div>
+
+<!-- 중앙에 배치된 헤더_보라마크-->
+<div class="header">
+  <h3></h3>
+</div>
+
+<!-- 카테고리 버튼 추가 9월 16일-->
+<div class="category-buttons d-flex justify-content-center">
+  <!-- 각 카테고리 버튼 반복 출력 9월 16일-->
+  <th:block th:each="category : ${categorylist}">
+    <a th:href="@{/artist/category/{categoryNo}(categoryNo=${category.ccode})}"
+       th:text="${category.cat_name}"
+       class="btn category-btn"
+       th:classappend="${category.ccode == selectedCategory ? 'active' : ''}">
+    </a>
+  </th:block>
+</div>
+
+<!-- 중앙에 배치된 헤더_보라마크-->
+<div class="header">
+  <h3></h3>
+</div>
+
+
+<!-- 컨텐츠를 담는 컨테이너 -->
+<div class="container ms-5">
+
+  <!-- 배너 1 (Carousel 1) -->
+  <div id="carousel1" class="carousel slide" data-bs-ride="carousel">
+    <!-- Indicators/dots -->
+    <div class="carousel-indicators">
+      <button type="button" data-bs-target="#carousel1" data-bs-slide-to="0" class="active"></button>
+      <button type="button" data-bs-target="#carousel1" data-bs-slide-to="1"></button>
+      <button type="button" data-bs-target="#carousel1" data-bs-slide-to="2"></button>
+      <button type="button" data-bs-target="#carousel1" data-bs-slide-to="3"></button>
+      <button type="button" data-bs-target="#carousel1" data-bs-slide-to="4"></button>
+      <button type="button" data-bs-target="#carousel1" data-bs-slide-to="5"></button>
+    </div>
+
+    <!-- The slideshow/carousel -->
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img src="/artist_img/shop1.jpg" alt="New Image" class="d-block w-100">
+        <div class="carousel-caption">
+          <h3>광고1_up</h3>
+          <p>Check out this new image!_1</p>
+        </div>
+      </div>
+
+      <div class="carousel-item">
+        <img src="/artist_img/shop2.jpg" alt="Los Angeles" class="d-block w-100">
+        <div class="carousel-caption">
+          <h3>광고2_up</h3>
+          <p>Check out this new image!_2</p>
+        </div>
+      </div>
+
+      <div class="carousel-item">
+        <img src="/artist_img/shop3.jpg" alt="Chicago" class="d-block w-100">
+        <div class="carousel-caption">
+          <h3>광고3_up</h3>
+          <p>Check out this new image!_3</p>
+        </div>
+      </div>
+
+      <div class="carousel-item">
+        <img src="/artist_img/shop5.jpg" alt="New York" class="d-block w-100">
+        <div class="carousel-caption">
+          <h3>광고4_up</h3>
+          <p>Check out this new image!_4</p>
+        </div>
+      </div>
+
+
+    <!-- Left and right controls/icons -->
+    <button class="carousel-control-prev" type="button" data-bs-target="#carousel1" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon"></span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carousel1" data-bs-slide="next">
+      <span class="carousel-control-next-icon"></span>
+    </button>
+  </div>
+  <br>
+
+
+    <!-- 중앙에 배치된 헤더_보라마크-->
+    <div class="header">
+      <h3></h3>
+    </div>
+
+  <!-- 검색 폼 9월 11일-->
+  <div class="container mt-4">
+    <form th:action="@{/artist/shop/search}" method="post" class="d-flex">
+      <input class="form-control me-2" type="search" name="name" placeholder="검색어를 입력하세요" aria-label="Search">
+      <button class="btn btn-outline-success" type="submit">검색</button>
+    </form>
+
+  </div>
+
+
+  <!-- 상품 리스트 -->
+  <div th:each="entry : ${map}">
+    <div th:if="${entry.value.size() != 0}">
+      <h3 class="mt-3" th:text="${categorylist[entry.key - 1].getCat_name()} + ' 상품'">상품</h3>
+      <div class="row">
+        <!-- 상품 리스트 아이템을 반복문으로 출력 -->
+        <div th:each="pDto : ${entry.value}" class="col-md-3 mb-4">
+          <div class="card">
+            <img th:src="@{'/images/' + ${pDto.image}}"
+                 class="card-img-top" alt="상품 이미지">
+
+            <div class="card-body">
+              <h5 class="card-title" th:text="${pDto.name}">상품명</h5>
+              <p class="card-text" th:text="${pDto.price}">가격</p>
+
+              <!--              <a th:href="@{/shopping/UprodView.do(no=${pDto.no})}" class="btn btn-primary">상세보기</a>-->
+              <a th:href="@{/artist/UprodView.do(no=${pDto.no})}" class="btn btn-primary">상세보기</a>
+              <a type="button" th:href="@{/cart/addCart2.do(productNo=${pDto.no}, productQty=1, userID=${session.userId})}" class="btn btn-sm btn-primary">장바구니 담기</a>
+
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div th:if="${entry.value.size() == 0}">
+      <br th:text="${entry.key} + ' 상품이 없습니다!!'"></br>
+    </div>
+  </div>
+
+    <!-- 중앙에 배치된 헤더_보라마크-->
+    <div class="header">
+      <h3></h3>
+    </div>
+
+  <!-- 페이지네이션 링크 9월 9일  -->
+  <nav aria-label="Page navigation">
+    <ul class="pagination">
+      <!-- 첫 페이지 링크 -->
+      <li class="page-item" th:classappend="${currentPage == 1 ? 'disabled' : ''}">
+        <a class="page-link" th:href="@{/artist/shop(page=1, size=${pageSize})}" aria-label="First">
+          <span aria-hidden="true">&laquo;&laquo;</span>
+        </a>
+      </li>
+      <!-- 이전 페이지 링크 -->
+      <li class="page-item" th:classappend="${currentPage == 1 ? 'disabled' : ''}">
+        <a class="page-link" th:href="@{/artist/shop(page=${currentPage - 1}, size=${pageSize})}" aria-label="Previous">
+          <span aria-hidden="true">&laquo;</span>
+        </a>
+      </li>
+      <!-- 페이지 번호 링크 -->
+      <li class="page-item" th:each="i : ${#numbers.sequence(1, totalPages)}" th:classappend="${currentPage == i ? 'active' : ''}">
+        <a class="page-link" th:href="@{/artist/shop(page=${i}, size=${pageSize})}" th:text="${i}">1</a>
+      </li>
+      <!-- 다음 페이지 링크 -->
+      <li class="page-item" th:classappend="${currentPage == totalPages ? 'disabled' : ''}">
+        <a class="page-link" th:href="@{/artist/shop(page=${currentPage + 1}, size=${pageSize})}" aria-label="Next">
+          <span aria-hidden="true">&raquo;</span>
+        </a>
+      </li>
+      <!-- 마지막 페이지 링크 -->
+      <li class="page-item" th:classappend="${currentPage == totalPages ? 'disabled' : ''}">
+        <a class="page-link" th:href="@{/artist/shop(page=${totalPages}, size=${pageSize})}" aria-label="Last">
+          <span aria-hidden="true">&raquo;&raquo;</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+
+
+  <!-- Footer -->
+  <th:block th:replace="/include/fragments :: footerFragment"></th:block>
+</div>
+</body>
+</html>

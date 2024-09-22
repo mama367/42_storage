@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>카테고리 수정</title>
+    <!-- 여기에 CSS 링크 추가 -->
+</head>
+<body>
+<!-- 헤더 포함 -->
+<th:block th:replace="/include/fragments :: headerFragment"></th:block>
+
+<!-- 메시지 알림 -->
+<div th:if="${msg != null}">
+    <script>
+        alert([[${msg}]]);
+    </script>
+</div>
+
+<!-- 컨텐츠 업데이트 -->
+<div class="container w-50 mt-5 border shadow p-5">
+    <h3>영어_카테고리 수정</h3><br>
+    <form th:action="@{/category/update}" method="post">
+        <table class="table table-borderless">
+            <tbody>
+            <tr>
+                <td>카테고리 번호</td>
+                <td>
+                    <input type="text" class="form-control" name="cnum" th:value="${dto.cnum}" readonly/>
+                </td>
+            </tr>
+            <tr>
+                <td>카테고리 코드</td>
+                <td>
+                    <input type="text" class="form-control" name="ccode" th:value="${dto.ccode}"/>
+                </td>
+            </tr>
+            <tr>
+                <td>카테고리 명</td>
+                <td>
+                    <input type="text" class="form-control" name="cat_name" th:value="${dto.cat_name}"/>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" class="text-center"><br><br>
+                    <input type="submit" class="btn btn-primary" value="카테고리 수정"/>
+                    <!-- <input type="reset" class="btn btn btn-secondary" value="취소"/> -->
+                    <a href="/category" class="btn btn-outline-primary">카테고리 리스트</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </form>
+</div>
+
+<!-- 푸터 포함 -->
+<th:block th:replace="/include/fragments :: footerFragment"></th:block>
+</body>
+</html>

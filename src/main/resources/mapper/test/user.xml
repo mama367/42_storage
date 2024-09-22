@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mbc.day03.domain.UserDAO">
+    <!--   사용자 리스트 가져오기   -->
+    <select id="getList" resultType="map">
+        select no, name, id, email, tel, address, zip,
+        DATE_FORMAT(date, '%Y-%m-%d') as date, privileges,
+        birth, report, request
+        from user
+    </select>
+
+    <!--   사용자 검색   -->
+    <select id="userSearch" resultType="map">
+        select no, name, id, email, tel, address, zip, birth, privileges,
+        DATE_FORMAT(date, '%Y-%m-%d') as date
+        from user
+        where 1=1
+
+        <if test="name != 'All'">
+            and name like concat(#{name}, '%')
+        </if>
+        <if test="groupNo != 'All'">
+            and groupNo = #{groupNo}
+        </if>
+    </select>
+
+    <!--  사용자 등록  -->
+    <insert id="userRegister">
+        insert into user(name, id, password, email, tel, address, zip, privileges, birth, request)
+        values(#{name}, #{id}, #{password}, #{email}, #{tel}, #{address}, #{zip}, #{privileges}, #{birth}, #{request})
+    </insert>
+
+    <!--  관리자 등록  -->
+    <insert id="adminRegister">
+        insert into user(name, id, password, email, tel, address, zip, privileges, birth, request)
+        values(#{name}, #{id}, #{password}, #{email}, #{tel}, #{address}, #{zip}, #{privileges}, #{birth}, #{request})
+    </insert>
+
+    <!--  사용자 가져오기  -->
+    <select id="getListOne" resultType="Map">
+        select no, name, id, password, email, tel, address, zip, date, privileges, report, request, birth
+        from user
+        where no = CAST(#{no} as SIGNED)
+    </select>
+
+    <!--  사용자 수정  -->
+    <update id="userModify">
+        update user
+        set
+        name = #{name},
+        id = #{id},
+        password = #{password},
+        email = #{email},
+        tel = #{tel},
+        address = #{address},
+        zip = #{zip},
+        privileges = #{privileges},
+        birth = #{birth},
+        report = #{report},
+        request = #{request}
+        where no = CAST(#{no} as SIGNED)
+    </update>
+
+    <!--로그인-->
+    <select id="userLogin" resultType="Map">
+        SELECT * FROM user WHERE id = #{id}
+    </select>
+
+    <select id="getPw">
+        SELECT password FROM user WHERE id = #{id}
+    </select>
+
+    <select id="getNo">
+        SELECT no FROM user WHERE id = #{id}
+    </select>
+
+    <!--  사용자 직접 수정(마이페이지)  -->
+    <update id="userMypage">
+        update user
+        set
+        name = #{name},
+        password = #{password},
+        email = #{email},
+        tel = #{tel},
+        address = #{address},
+        zip = #{zip},
+        birth = #{birth},
+        request = #{request}
+        where no = CAST(#{no} as SIGNED)
+    </update>
+
+    <delete id="userDelete">
+        delete from user
+        WHERE no = CAST(#{no} AS SIGNED)
+    </delete>
+
+    <!-- 선택 삭제 -->
+    <delete id="PartistDelete">
+        delete from user
+        <where>
+            <foreach collection="chkList" item="item" open="no in (" separator="," close=")">
+                #{item}
+            </foreach>
+        </where>
+    </delete>
+
+    <!--  사용자 권한 신청 받기  -->
+    <update id="userAccept">
+        update user
+        set
+        request = 0,
+        privileges = 1
+        where no = CAST(#{no} as SIGNED)
+    </update>
+
+    <!--  사용자 권한 신청 반려  -->
+    <update id="userReject">
+        update user
+        set
+        request = 0
+        where no = CAST(#{no} as SIGNED)
+    </update>
+</mapper>

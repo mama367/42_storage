@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!-- 헤더 -->
+<th:block th:replace="/include/fragments :: headerFragment"></th:block>
+
+<!-- 컨텐츠 영역 -->
+<div class="container w-50 mt-3">
+    <h3>마이페이지</h3>
+    <form action="/user/privileges" method="post" id="mypageForm">
+        <input type="hidden" name="no" th:value="${map.get('no')}">
+        <p>이름<input class="form-control" type="text" id="name" name="name" th:value="${map.get('name')}" readonly></p>
+        <p>이름<input class="form-control" type="text" id="id" name="id" th:value="${map.get('id')}" readonly></p>
+        <p>비밀번호<input class="form-control" type="text" id="password" name="password" value="********" readonly></p>
+        <p><a class="btn btn-success" th:href="@{/user/chPw(no=${map.get('no')})}">비밀변호 변경</a></p>
+        <p>이메일<input class="form-control" type="text" id="email" name="email" th:value="${map.get('email')}" readonly></p>
+        <p>전화번호<input class="form-control" type="text" id="tel" name="tel" th:value="${map.get('tel')}" readonly></p>
+        <p>주소<input class="form-control" type="text" id="address" name="address" th:value="${map.get('address')}" readonly></p>
+        <p>우편번호<input class="form-control" type="text" id="zip" name="zip" th:value="${map.get('zip')}" readonly></p>
+        <p>생년월일<input class="form-control" type="text" id="birth" name="birth" th:value="${map.get('birth')}" readonly></p>
+        <input type="hidden" id="request" name="request" value="0">
+
+        <!--  ★판매자 신청여부, 관리자 권한에 따라 판매자 신청버튼이 다양하게 표시되도록 함  -->
+        <th:block th:if="${map.get('request')} == 0">
+            <th:block th:if="${map.get('privileges')} == 2">
+                <p><button type="button" class="btn btn-outline-success" id="requestButton">판매자 신청하기</button></p>
+            </th:block>
+
+            <th:block th:if="${map.get('privileges')} == 1">
+                <p><span class="text-success">판매자 입니다.</span></p>
+            </th:block>
+
+            <th:block th:if="${map.get('privileges')} == 0">
+                <p><span class="text-success">관리자 계정입니다.</span></p>
+            </th:block>
+        </th:block>
+
+        <th:block th:if="${map.get('request')} == 1">
+            <th:block th:if="${map.get('privileges')} == 2">
+                <p><span class="text-success">판매자 신청되었습니다.</span></p>
+            </th:block>
+
+            <th:block th:if="${map.get('privileges')} == 1">
+                <p><span class="text-success">판매자 입니다.</span></p>
+            </th:block>
+
+            <th:block th:if="${map.get('privileges')} == 0">
+                <p><span class="text-success">관리자 계정입니다.</span></p>
+            </th:block>
+        </th:block>
+
+        <div class="register_wrap">
+            <a class="btn btn-success" th:href="@{/user/mypageUpdate(no=${map.get('no')})}">수정페이지</a>
+        </div>
+    </form>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const requestButton = document.getElementById('requestButton');
+            const requestInput = document.getElementById('request');
+            const mypageForm = document.getElementById('mypageForm');
+
+            if (requestButton) {
+                requestButton.addEventListener('click', function() {
+                    requestInput.value = '1';
+                    mypageForm.submit();
+                });
+            }
+        });
+    </script>
+</div>
+
+
+<!-- 푸터 -->
+<th:block th:replace="/include/fragments :: footerFragment"></th:block>
+
+</body>
+</html>

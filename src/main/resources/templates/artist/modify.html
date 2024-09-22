@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!-- 헤더 -->
+<th:block th:replace="/include/fragments :: headerFragment"></th:block>
+
+<!-- 컨텐츠 영역 -->
+<div class="container w-50 mt-3">
+    <h3>아티스트 수정</h3>
+    <form enctype="multipart/form-data" action="/artist/modify" method="post">
+        <input type="hidden" name="no" th:value="${map.get('no')}">
+        <p><input class="form-control" type="text" id="name" name="name" th:value="${map.get('name')}"></p>
+        <p>
+            <select class="form-select" id="groupNo" name="groupNo">
+                <!-- 등록된 그룹 없음 -->
+                <th:block th:if="${#lists.isEmpty(Glist)}">
+                    <option value="0">등록된 그룹 없음</option>
+                </th:block>
+                <!-- 등록된 그룹 있음 -->
+                <th:block th:unless="${#lists.isEmpty(Glist)}">
+                    <option value="0" th:selected="${groupNo == 0}">그룹 선택</option>
+                    <th:block th:each="group : ${Glist}">
+                        <option th:value="${group.no}"
+                                th:text="${group.name}"
+                                th:selected="${group.no == map.get('groupNo')}"></option>
+                    </th:block>
+                </th:block>
+            </select>
+        <p><input type="hidden" class="form-control form-control-sm" id="groupName" name="groupName" th:value="${map.get('groupName')}"/>[[${map.get('groupName')}]]</p>
+        </p>
+        <p><input class="form-control" type="file" id="image" name="image" placeholder="이미지 등록"></p>
+        <p><input type="hidden" class="form-control form-control-sm" id="oldImage" name="oldImage" th:value="${map.get('image')}"/>[[${map.get('image')}]]</p>
+        <p><input class="form-control" type="text" id="birth" name="birth" th:value="${map.get('birth')}"></p>
+        <p><input type="submit" class="btn btn-success" value="수정하기"></p>
+    </form>
+</div>
+
+<script>
+
+</script>
+
+
+<!-- 푸터 -->
+<th:block th:replace="/include/fragments :: footerFragment"></th:block>
+
+</body>
+</html>

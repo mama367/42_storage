@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mbc.day03.domain.ShoppingDao">
+
+    <!-- 상품 등록 -->
+    <insert id="insertShopping" parameterType="com.mbc.day03.domain.ShoppingDTO">
+        INSERT INTO product (name, price, image, userNo, groupNo, categoryNo, pcontent)
+        VALUES (#{name}, #{price}, #{image}, #{userNo}, #{groupNo}, #{categoryNo}, #{pcontent})
+    </insert>
+
+    <!-- 상품 리스트 -->
+    <select id="shoppingList" resultType="com.mbc.day03.domain.ShoppingDTO">
+        SELECT * FROM product
+    </select>
+
+    <!-- 상품 삭제 -->
+    <delete id="deleteShopping">
+        DELETE FROM product WHERE no = #{no}
+    </delete>
+
+    <!-- 상품 조회 -->
+    <select id="getShopping" parameterType="Long" resultType="com.mbc.day03.domain.ShoppingDTO">
+        SELECT * FROM product WHERE no = #{no}
+    </select>
+
+    <!-- 상품 수정 -->
+    <update id="updateShopping" parameterType="com.mbc.day03.domain.ShoppingDTO">
+        UPDATE product
+        SET Name = #{name}, price = #{price}, image = #{image}, userNo = #{userNo}, groupNo = #{groupNo},
+        categoryNo = #{categoryNo}, pcontent = #{pcontent}, report = #{report}, score = #{score}
+        WHERE no = #{no}
+    </update>
+
+    <!-- 카테고리별 상품 리스트 -->
+    <select id="getProdByCategory" parameterType="String" resultType="com.mbc.day03.domain.ShoppingDTO">
+        SELECT * FROM product WHERE categoryNo = #{code}
+    </select>
+
+    <!-- 그룹별 상품 리스트 -->
+    <select id="getProdByGroup" parameterType="int" resultType="com.mbc.day03.domain.ShoppingDTO">
+        SELECT * FROM product WHERE groupNo = #{groupNo}
+    </select>
+
+    <!-- 스펙 - 상품별 리스트 -->
+    <select id="getProdByPcontent" parameterType="String" resultType="com.mbc.day03.domain.ShoppingDTO">
+        SELECT * FROM product WHERE pcontent LIKE CONCAT('%', #{pcontent}, '%')
+    </select>
+
+    <!-- 카테고리별 페이지네이션 9월 9일 -->
+    <select id="getPaginatedProdByCategory" parameterType="map" resultType="com.mbc.day03.domain.ShoppingDTO">
+        SELECT * FROM product
+        WHERE categoryNo = #{code}
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <!-- 페이지네이션을 적용한 상품 리스트 조회 9월 9일  -->
+    <select id="getPaginatedShoppingList" parameterType="map" resultType="com.mbc.day03.domain.ShoppingDTO">
+        SELECT * FROM product
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <!-- 총 상품 개수 조회 9월 9일 -->
+    <select id="getTotalProductCount" resultType="int">
+        SELECT COUNT(*) FROM product
+    </select>
+
+    <!-- 상품명으로 검색 기능 9월 10일, 9월 11일 -->
+    <select id="searchProductsByName" parameterType="String" resultType="com.mbc.day03.domain.ShoppingDTO">
+        SELECT * FROM product WHERE name LIKE CONCAT('%', #{name}, '%')
+    </select>
+
+    <!-- 판매자 전용 페이지 만들기 9월 11일, 9월 12일  -->
+    <select id="getProductsByUser" parameterType="int" resultType="com.mbc.day03.domain.ShoppingDTO">
+        SELECT * FROM product WHERE userNo = #{userNo}
+    </select>
+
+</mapper>

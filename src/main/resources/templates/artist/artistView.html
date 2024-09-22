@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Artist Page</title>
+    <!-- Slick Carousel CSS -->
+    <link rel="stylesheet" type="text/css" href="/css/slick/slick.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/slick/slick-theme.css"/>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" type="text/css" href="/css/styles.css">
+    <style>
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .main-content {
+            position: relative;
+            width: fit-content;
+            margin: 0 auto;
+        }
+        .main-photo {
+            width: 100%;
+            display: block;
+        }
+        .thumbnail-container {
+            display: flex;
+            justify-content: center;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            gap: 20px;
+        }
+        .thumbnail {
+            width: 150px;
+            height: auto;
+            cursor: pointer;
+            border: 2px solid white;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+        }
+        .product-thumbnails {
+            margin: 20px auto;
+            max-width: 90%;
+            text-align: center;
+        }
+        .demo-slider {
+            display: flex;
+            overflow-x: auto;
+            white-space: nowrap;
+            gap: 10px;
+        }
+        .demo-slider .item {
+            display: inline-block;
+        }
+        .demo-slider img {
+            width: 150px;
+            height: auto;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+        }
+        .view-all-button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: lightgray;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            display: inline-block;
+            cursor: pointer;
+        }
+        .footer {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+        .board-section {
+            width: 45%;
+        }
+        .board-section h3 {
+            margin-bottom: 10px;
+        }
+        .board-section ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .board-section li {
+            margin-bottom: 5px;
+        }
+        .board-button {
+            display: block;
+            margin-top: 10px;
+            padding: 10px;
+            text-align: center;
+            background-color: lightgray;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .artist-info {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .artist-info img {
+            width: 150px; /* 아티스트 사진 크기 조정 9월 10일 */
+            height: auto;
+            cursor: pointer;
+            border: 2px solid white;
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
+        }
+        /* 모달 스타일 9월 10일 - 클릭하면 원본 사진 볼 수 있음 + 부드럽게 moving */
+        .modal {
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal.show {
+            opacity: 1;
+        }
+
+        .modal-content {
+            max-width: 50%;
+            max-height: 50%;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .close {
+            position: absolute;
+            top: 20px;
+            right: 35px;
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+<!-- 헤더 -->
+<th:block th:replace="/include/fragments :: headerFragment"></th:block>
+
+<!-- 아티스트 페이지 콘텐츠 : 정보 추가 9월 10일-->
+<div class="header">
+    <h1 th:text="${group.name}"></h1>
+    <p th:text="${group.info}"></p>
+    <p th:text="${group.message}"></p>
+</div>
+<div class="main-content">
+    <img th:src="@{'/images/' + ${group.image}}" alt="그룹 메인 사진" class="main-photo">
+</div>
+
+<div class="artist-info">
+    <!-- 멤버 정보 섹션 9월 11일-->
+    <div style="text-align: center; background-color: lightgray; display: inline-block; padding: 10px;">
+        <h3>멤버 정보</h3>
+    </div>
+
+    <!-- 아티스트 정보 반복 9월 11일-->
+    <th:block th:each="artist : ${artist}">
+        <div style="text-align: center; margin-top: 20px;">
+            <h3 th:text="${artist.name}"></h3>
+            <p th:text="${artist.birth}"></p>
+            <img th:src="@{'/images/' + ${artist.image}}" alt="아티스트 사진"
+                 onclick="openModal(this.src)">
+        </div>
+    </th:block>
+</div>
+
+<!-- 모달 9월 10일 - 멤버 클릭시 변화 -->
+<div id="imageModal" class="modal">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <img class="modal-content" id="modalImage">
+</div>
+
+<!-- 상품 썸네일 슬라이더 -->
+<div class="product-thumbnails">
+    <h3>상품 게시판</h3>
+    <div class="demo-slider">
+        <th:block th:each="prod : ${prodList}">
+            <div class="item">
+                <a th:href="@{/artist/UprodView.do(no=${prod.no})}">
+                    <img th:src="@{'/images/' + ${prod.image}}" style="height:150px;" alt="상품 이미지">
+                </a>
+            </div>
+        </th:block>
+    </div>
+    <a href="/artist/shop" class="view-all-button">상품 전체 보기</a>
+</div>
+
+<!-- 게시판 섹션 -->
+<div class="footer">
+    <div class="board-section">
+        <h3>공지 게시판</h3>
+        <ul>
+            <th:block th:each="nBoard : ${noticeTop}">
+                <li><a th:href="@{/boardView.do(bid=${nBoard.bid}, viewPage=1, searchType='', keyword='', cntPerPage=10)}">[Notice] <span th:text="${nBoard.subject}"></span></a></li>
+            </th:block>
+        </ul>
+        <a th:href="@{/artistBoard.do(btype=0, gno=${group.no})}" class="board-button">공지 보러가기</a>
+    </div>
+    <div class="board-section">
+        <h3>커뮤니티 게시판</h3>
+        <ul>
+            <th:block th:each="cBoard : ${communityTop}">
+                <li><a th:href="@{/boardView.do(bid=${cBoard.bid}, viewPage=1, searchType='', keyword='', cntPerPage=10)}">[게시] <span th:text="${cBoard.subject}"></span></a></li>
+            </th:block>
+        </ul>
+        <a th:href="@{/artistBoard.do(btype=1, gno=${group.no})}" class="board-button">커뮤니티 합류하기</a>
+    </div>
+</div>
+
+<!-- 푸터 -->
+<th:block th:replace="/include/fragments :: footerFragment"></th:block>
+
+<!-- jQuery 및 Slick Carousel JS -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script type="text/javascript" src="/js/slick/slick.min.js"></script>
+<script type="text/javascript" src="/js/02.js"></script>
+
+<!-- 모달 관련 JavaScript 9월 10일 -->
+<script>
+    function openModal(src) {
+        const modal = document.getElementById('imageModal');
+        const modalImage = document.getElementById('modalImage');
+        modal.style.display = 'flex';
+        modal.classList.add('show');
+        modalImage.src = src;
+    }
+
+    function closeModal() {
+        const modal = document.getElementById('imageModal');
+        modal.classList.remove('show');
+        setTimeout(() => {
+            modal.style.display = 'none';
+        }, 300); // 모달 전환 효과 시간과 맞추기
+    }
+</script>
+</body>
+</html>

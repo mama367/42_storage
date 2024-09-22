@@ -1,0 +1,126 @@
+@import url("http://cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css");
+
+body {
+    background-color: #fdfdfd;
+}
+
+.demo-slider{
+    width: 1000px;
+    margin: 0 auto;
+    border: 1px solid red;
+    /* display: flex;   */
+}
+
+.demo-slider .item{
+    padding: 0 10px;
+    border: 1px solid #000;
+}
+
+.demo-slider .item img{
+    width: 100%;
+}
+
+
+/* dot 탭 네비 */
+.slick-dots {
+    bottom: 10px;
+}
+
+
+.prevBtn{
+    position: absolute;
+    top: 50%;
+    left:-50px;
+}
+
+.prevBtn, .nextBtn
+{
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+}
+
+.prevBtn i{
+    color: rgba(95, 92, 92, 0.712);
+    border-radius: 50%;
+    box-shadow: 0 3px 3px #00000049;
+    /* text-shadow: 0 3px 3px #0000009f; */
+    padding: 7px;
+    z-index: 5;
+    font-size: 30px;
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 0.418);
+}
+
+
+.nextBtn{
+    position: absolute;
+    top: 50%;
+    right: -100px;
+}
+
+.nextBtn i{
+    color: white;
+    text-shadow: 0 3px 3px #0000009f;
+    z-index: 5;
+    font-size: 80px;
+    cursor: pointer;
+}
+
+.rate {
+    border-bottom-right-radius: 12px;
+    border-bottom-left-radius: 12px
+}
+
+.rating {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: center
+}
+
+.rating>input {
+    display: none
+}
+
+.rating>label {
+    position: relative;
+    width: 1em;
+    font-size: 30px;
+    font-weight: 300;
+    color: #FFD600;
+    cursor: pointer
+}
+
+.rating>label::before {
+    content: "\2605";
+    position: absolute;
+    opacity: 0
+}
+
+.rating>label:hover:before,
+.rating>label:hover~label:before {
+    opacity: 1 !important
+}
+
+.rating>input:checked~label:before {
+    opacity: 1
+}
+
+.rating:hover>input:checked~label:before {
+    opacity: 0.4
+}
+
+.buttons {
+    top: 36px;
+    position: relative
+}
+
+.rating-submit {
+    border-radius: 8px;
+    color: #fff;
+    height: auto
+}
+
+.rating-submit:hover {
+    color: #fff
+}

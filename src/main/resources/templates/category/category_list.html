@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>카테고리 리스트</title>
+    <!-- 여기에 CSS 링크 추가 -->
+    <style>
+        .btn-center {
+            display: block;
+            width: 200px; /* 버튼의 길이 조정 */
+            margin: 20px auto; /* 버튼을 가운데에 배치 */
+            text-align: center; /* 텍스트를 가운데 정렬 */
+        }
+        .btn-container {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0; /* 위아래 여백 추가 */
+        }
+    </style>
+</head>
+<body>
+<!-- 헤더 포함 -->
+<th:block th:replace="/include/fragments :: headerFragment"></th:block>
+
+<!-- 메시지 알림 -->
+<div th:if="${msg != null}">
+    <script>
+        alert([[${msg}]]);
+    </script>
+</div>
+
+<!-- 컨텐츠 -->
+<div class="container mt-5 border shadow p-5">
+    <h2>아티스트 상품 카테고리 리스트</h2><br>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>상품번호</th>
+            <th>상품코드</th>
+            <th>카테고리명(종류)</th>
+            <th>수정</th>
+            <th>삭제</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="dto : ${list}">
+            <td th:text="${dto.cnum}"></td>
+            <td th:text="${dto.ccode}"></td>
+            <td th:text="${dto.cat_name}"></td>
+            <td><a th:href="@{/category/edit(cnum=${dto.cnum})}" class="btn btn-sm btn-outline-primary">수정</a></td>
+            <td>
+                <!-- 삭제 폼 추가 -->
+                <form action="/category/delete" method="post" style="display: inline;">
+                    <input type="hidden" name="cnum" th:value="${dto.cnum}">
+                    <button type="submit" class="btn btn-sm btn-outline-danger">삭제</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- 버튼을 가운데 배치 -->
+<div class="btn-container">
+    <a href="/category/input" class="btn btn-success btn-center">카테고리 등록하기</a>
+</div>
+
+<!-- 푸터 포함 -->
+<th:block th:replace="/include/fragments :: footerFragment"></th:block>
+</body>
+</html>

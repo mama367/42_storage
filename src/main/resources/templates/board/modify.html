@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:replace="/include/fragments :: headerFragment"></th:block>
+
+<div class="container w-50 mt-5 p-5 shadow text-white">
+    <h4>글 수정</h4>
+    <form action="boardModify.do" method="post">
+        <input type="hidden" th:id="viewPage" th:name="viewPage" th:value="${pDto.viewPage}"/>
+        <input type="hidden" th:id="searchType" th:name="searchType" th:value="${pDto.searchType}"/>
+        <input type="hidden" th:id="keyword" th:name="keyword" th:value="${pDto.keyword}"/>
+        <input type="hidden" th:id="cntPerPage" th:name="cntPerPage" th:value="${pDto.cntPerPage}"/>
+
+        <div class="form-group">
+            <label th:for="bid">번호</label>
+            <input class="form-control" type="text" th:id="bid"
+                   th:name="bid" th:value="${dto.bid}" readonly>
+        </div>
+        <div class="form-group">
+            <label th:for="subject">제목</label>
+            <input class="form-control" type="text" th:id="subject"
+                   th:name="subject" th:value="${dto.subject}">
+        </div>
+        <div class="form-group">
+            <label th:for="contents">내용</label>
+            <textarea class="form-control mt-2"
+                      th:name="contents" th:id="contents">[[${dto.contents}]]</textarea>
+        </div>
+        <div class="form-group">
+            <label th:for="writer">글쓴이</label>
+            <input class="form-control mt-2" type="text"
+                   th:id="writer" th:name="writer" th:value="${dto.writer}" disabled>
+        </div>
+
+        <div class="text-center mt-3">
+            <!-- submit이 되는 버튼 -->
+            <button id="btn-modify" class="btn btn-primary me-2">수정하기</button>
+
+            <!-- form 태그안에 button은 type이 생략되면 submit이 된다.  -->
+            <!--<button type="button" id="btn-remove" class="btn btn-danger me-2">삭제하기</button>-->
+            <a class="btn btn-danger me-2" th:href="@{boardRemove.do(bid=${dto.bid},viewPage=${pDto.viewPage},searchType=${pDto.searchType},keyword=${pDto.keyword},cntPerPage=${pDto.cntPerPage})}">삭제하기</a>
+            <!--<button type="button" id="btn-list" class="btn btn-primary">리스트</button>-->
+            <a class="btn btn-primary" th:href="@{boardList.do(viewPage=${pDto.viewPage},searchType=${pDto.searchType},keyword=${pDto.keyword},cntPerPage=${pDto.cntPerPage})}">리스트</a>
+        </div>
+    </form>
+</div>
+<script type="text/javascript">
+    $("#btn-list").click(()=>{
+        location.href="<c:url value='boardList.do?viewPage=${pDto.viewPage}&searchType=${pDto.searchType}&keyword=${pDto.keyword}&cntPerPage=${pDto.cntPerPage}'/>";
+    });
+
+    $("#btn-remove").click(()=>{
+        location.href="<c:url value='boardRemove.do?bid=${dto.bid}&viewPage=${pDto.viewPage}&searchType=${pDto.searchType}&keyword=${pDto.keyword}&cntPerPage=${pDto.cntPerPage}'/>";
+    });
+</script>

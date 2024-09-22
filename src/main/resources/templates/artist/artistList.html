@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!-- 헤더 -->
+<th:block th:replace="/include/fragments :: headerFragment"></th:block>
+<!-- 컨텐츠 영역 -->
+<div class="container">
+  <h3 class="mt3">아티스트 리스트</h3>
+
+  <form action="/artist/search" method="post">
+    <input type="text" id="name" name="name" placeholder="아티스트 이름"/>
+    <input type="submit" value="검색">
+  </form>
+
+  <form id="formTable" action="/artist/modify" method="post">
+    <table class="table">
+      <thead>
+      <tr>
+        <th>선택</th>
+        <th>번호</th>
+        <th>그룹</th>
+        <th>이름</th>
+        <th>아티스트 이미지</th>
+        <th>생년월일</th>
+        <th>수정</th>
+        <th>삭제</th>
+      </tr>
+      </thead>
+      <tbody>
+      <!--prod = Map객체-->
+      <th:block th:each="artist : ${list}">
+        <tr>
+          <!-- Map의 get(키(컬럼명)) 호출-->
+          <td><input type="checkbox" name="chkNo"
+                     th:value="${artist.get('no')}"></td>
+          <td th:text="${artist.get('no')}">번호</td>
+          <td th:text="${artist.get('groupNo')}">${group.get('name')}</td>
+          <td th:text="${artist.get('name')}"></td>
+          <!--<td th:text="${artist.get('image')}">-->
+          <td class="d-flex justify-content-center">
+            <img th:src="@{'/images/' + ${artist.get('image')}}"
+                 style="height:50px;" alt="아티스트 이미지">
+          </td>
+          <td th:text="${artist.get('birth')}"></td>
+          <td><a class="btn btn-info btn-sm" th:href="@{/artist/modify(no=${artist.get('no')})}">수정</a></td>
+          <td><a class="btn btn-danger btn-sm" th:href="@{/artist/delete(no=${artist.get('no')})}">삭제</a></td>
+        </tr>
+      </th:block>
+      </tbody>
+    </table>
+  </form>
+
+  <a href="/artist/register" class="btn btn-success">아티스트 등록하기</a>
+
+</div>
+<!-- 푸터 -->
+<th:block th:replace="/include/fragments :: footerFragment"></th:block>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mbc.day03.domain.GroupDAO">
+    <select id="getList" resultType="map">
+        select no, name, debut, info, image, message from `group`
+    </select>
+
+    <insert id="groupRegister">
+        insert into `group`(no, name, debut, info, image, message)
+        values(#{no}, #{name}, #{debut}, #{info}, #{image}, #{message})
+    </insert>
+
+    <delete id="groupDelete">
+        delete from `group`
+        where no = CAST(#{no} AS SIGNED)
+    </delete>
+
+    <select id="getListOne" resultType="map">
+        select no, name, debut, info, image, message
+        from `group`
+        where no = CAST(#{no} AS SIGNED)
+    </select>
+
+    <update id="groupModify">
+        update `group`
+        set
+        name = #{name},
+        debut= #{debut},
+        info= #{info},
+        image= #{image},
+        message= #{message}
+        where no = CAST(#{no} AS SIGNED)
+    </update>
+
+    <!-- 선택 삭제 -->
+    <delete id="PgroupDelete">
+        delete from `group`
+        <where>
+            <foreach collection="chkList" item="item" open="no in (" separator="," close=")">
+                #{item}
+            </foreach>
+        </where>
+    </delete>
+
+    <!--    상품 검색 -->
+    <select id="groupSearch" resultType="map">
+        select no, name, debut, info, image, message
+        from `group`
+        <!-- 동적쿼리 -->
+        where 1 = 1
+        <if test="name != 'all'">
+            and name like CONCAT(#{name}, '%') <!--like 스%, concat(): 문자열 합침함수-->
+        </if>
+        <if test="no != 'all'">
+            and no = #{no}
+        </if>
+    </select>
+</mapper>

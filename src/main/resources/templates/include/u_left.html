@@ -1,0 +1,37 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>My Page</title>
+</head>
+<body>
+<!-- 카테고리 -->
+<aside class="border-end sticky-top" style="width:250px" th:fragment="sidebar">
+    <h4>카테고리</h4>
+    <ul>
+        <!-- 카테고리 리스트가 있을 경우 -->
+        <th:block th:if="${categorylist != null and categorylist.size() > 0}">
+            <th:block th:each="dto : ${categorylist}">
+                <li><a th:href="@{/shopping/UcatList.do(cat_num=${dto.cnum}, code=${dto.ccode}, cat_name=${dto.cat_name})}" th:text="${dto.cat_name}"></a></li>
+            </th:block>
+        </th:block>
+        <!-- 카테고리 리스트가 없을 경우 -->
+        <th:block th:if="${categorylist == null or categorylist.size() == 0}">
+            <li>카테고리 없음</li>
+        </th:block>
+    </ul>
+    <ul class='mt-3'><br></ul>
+
+    <!-- 고객센터 -->
+    <h4>고객센터</h4>
+    <ul>
+        <li><a href="/boardList.do">공지사항</a></li>
+        <li><a href="/boardList.do">자주 묻는 질문</a></li>
+        <li><a href="/boardList.do">1:1 문의</a></li>
+        <li><a href="/boardList.do">서비스센터 안내</a></li>
+    </ul>
+</aside>
+</body>
+</html>
+

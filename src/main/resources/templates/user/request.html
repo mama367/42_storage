@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<!-- 헤더 -->
+<th:block th:replace="/include/fragments :: headerFragment"></th:block>
+<!-- 컨텐츠 영역 -->
+<div class="container">
+    <h3 class="mt3">신청자 리스트</h3>
+
+    <form action="/user/search" method="post">
+        <input type="text" id="name" name="name" placeholder="이름"/>
+        <select id="" name="">
+            <option value="all">전체</option>
+        </select>
+        <input type="submit" value="검색">
+    </form>
+
+    <form id="formTable" action="/user/request" method="post">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>선택</th>
+                <th>번호</th>
+                <th>이름</th>
+                <th>아이디</th>
+                <th>비밀번호</th>
+                <th>이메일</th>
+                <th>전화번호</th>
+                <th>주소</th>
+                <th>우편번호</th>
+                <th>가입일</th>
+                <th>관리자 구분</th>
+                <th>생년월일</th>
+                <th>신고횟수</th>
+                <th>관리자 수락</th>
+                <th>관리자 반려</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!--prod = Map객체-->
+            <th:block th:each="user : ${list}" th:if="${user.get('request') == 1}">
+                <tr>
+                    <!-- Map의 get(키(컬럼명)) 호출-->
+                    <td><input type="checkbox" name="chkNo" th:value="${user.get('no')}"></td>
+                    <td th:text="${user.get('no')}">번호</td>
+                    <td th:text="${user.get('name')}"></td>
+                    <td th:text="${user.get('id')}"></td>
+                    <td th:text="${user.get('password')}"></td>
+                    <td th:text="${user.get('email')}"></td>
+                    <td th:text="${user.get('tel')}"></td>
+                    <td th:text="${user.get('address')}"></td>
+                    <td th:text="${user.get('zip')}"></td>
+                    <td th:text="${user.get('date')}"></td>
+                    <td th:if="${user.get('privileges') == 0}" th:text="관리자"></td>
+                    <td th:if="${user.get('privileges') == 1}" th:text="판매자"></td>
+                    <td th:if="${user.get('privileges') == 2}" th:text="사용자"></td>
+                    <td th:text="${user.get('birth')}"></td>
+                    <td th:text="${user.get('report')}"></td>
+                    <td><a class="btn btn-info btn-sm" th:href="@{/user/accept(no=${user.get('no')})}">수락</a></td>
+                    <td><a class="btn btn-danger btn-sm" th:href="@{/user/reject(no=${user.get('no')})}">반려</a></td>
+                </tr>
+            </th:block>
+            </tbody>
+        </table>
+        <input type="hidden" name="in_price">
+    </form>
+</div>
+
+<!-- 푸터 -->
+<th:block th:replace="/include/fragments :: footerFragment"></th:block>
+</body>
+</html>

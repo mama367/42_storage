@@ -1,0 +1,118 @@
+/*
+
+.rating-submit:hover {
+    color: #fff
+}
+
+@charset "utf-8";
+
+nav.navbar {
+    background: crimson;
+}
+
+.navbar-nav{
+
+}
+.nav-item {
+
+}
+
+.nav-link {color:white;}
+
+.findIdPw {
+
+}
+
+.findIdPw .fa{
+    color:#bbb;
+}
+
+.findIdPw a{
+    font-size: 13px;
+    color: #555;
+    text-decoration: none;
+}
+
+.findIdPw a:hover {
+    text-decoration: underline;
+}
+
+.findIdPw a+a:before{
+    content:'';
+    display:inline-block;
+    background-color:#808080;
+    width:3px;
+    height:3px;
+    vertical-align: 3px;
+    margin:0 5px;
+}
+
+.nav.nav-tabs a{
+    color:#666;
+}
+
+!* 이메일 인증 확인 *!
+#confirmEmail{
+    !* display는 존재가 사라짐(자리차지하지 않는다.)*!
+    !*display:none;*!
+    visibility:hidden;!*(안보일뿐 자리를 차지함) *!
+    height:0;
+    !*투명하게 할뿐 자리를 차지함*!
+    !*opacity:0;*!
+}*/
+
+.nav-link {color:white;}
+
+.rate {
+    border-bottom-right-radius: 12px;
+    border-bottom-left-radius: 12px
+}
+
+.rating {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: center
+}
+
+.rating>input {
+    display: none
+}
+
+.rating>label {
+    position: relative;
+    width: 1em;
+    font-size: 30px;
+    font-weight: 300;
+    color: #FFD600;
+    cursor: pointer
+}
+
+.rating>label::before {
+    content: "\2605";
+    position: absolute;
+    opacity: 0
+}
+
+.rating>label:hover:before,
+.rating>label:hover~label:before {
+    opacity: 1 !important
+}
+
+.rating>input:checked~label:before {
+    opacity: 1
+}
+
+.rating:hover>input:checked~label:before {
+    opacity: 0.4
+}
+
+.buttons {
+    top: 36px;
+    position: relative
+}
+
+.rating-submit {
+    border-radius: 8px;
+    color: #fff;
+    height: auto
+}

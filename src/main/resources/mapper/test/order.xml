@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mbc.project.domain.test.OrderDao">
+    <select id="getList" resultType="OrderDTO">
+        select oid, pno, pname, price, id, name,
+        DATE_FORMAT(in_date, '%Y-%m-%d') as in_date
+        from order_detail
+    </select>
+
+    <select id="doSearch" resultType="OrderDTO">
+        select oid, pno, pname, price, id, name,
+        DATE_FORMAT(in_date, '%Y-%m-%d') as in_date
+        from order_detail
+        WHERE 1=1
+        AND in_date >= DATE_FORMAT( #{sDate},'%Y%m%d')
+        AND in_date &lt; DATE_ADD(DATE_FORMAT(#{eDate},'%Y%m%d'), INTERVAL +1 DAY)
+        <if test="pname != 'ALL'">
+            AND pname like CONCAT(#{pname},'%')
+        </if>
+        <if test="name != 'ALL'">
+            AND name like CONCAT(#{name},'%')
+        </if>
+    </select>
+
+    <update id="updateMember">
+        update order_detail
+        set name = #{name}
+        where id = #{id}
+
+    </update>
+</mapper>

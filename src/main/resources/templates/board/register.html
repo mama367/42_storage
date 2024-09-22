@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:replace="/include/fragments :: headerFragment"></th:block>
+
+<div class="container w-50 mt-5 p-5 shadow">
+    <form action="artistBoardRegister.do" method="post">
+        <h4 style="color:white;">글쓰기</h4>
+
+        <select class="form-select form-select-sm mb-2" name="btype">
+            <!-- 상품 스펙이 없을 경우 -->
+            <option th:value="0" th:selected="${btype}" th:if="${session.userPrivileges == 0}">공지 게시판</option>
+            <option th:value="1">커뮤니티 게시판</option>
+        </select>
+
+        <input type="text" class="form-control mb-2"
+               id="subject" name="subject" placeholder="글제목" autofocus/>
+
+        <input type="text" class="form-control"
+               id="gno" name="gno" th:value="${gno}" readonly/>
+
+        <textarea class="form-control mt-2" name="contents" id="contents"
+                  placeholder="글내용" style="height:350px;"></textarea>
+
+        <input type="text" class="form-control mt-2"
+               id="writer" name="writer" th:value="${session.userId}" readonly/>
+
+        <div class="text-cener mt-3">
+            <button class="btn btn-primary">글등록</button>
+        </div>
+
+    </form>
+</div>

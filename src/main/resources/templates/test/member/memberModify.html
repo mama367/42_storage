@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!-- 헤더 -->
+<th:block th:replace="/include/fragments :: headerFragment"></th:block>
+
+<!-- 컨텐츠 영역 -->
+<div class="container w-50 mt-3">
+    <h3>회원 수정</h3>
+    <form action="/member/memModify" method="post">
+        <input type="hidden" name="mid" th:value="${mvo.mid}">
+        <p><input class="form-control" type="text" name="id" th:value="${mvo.id}" readonly></p>
+        <p><input class="form-control" type="password" name="pw" th:value="${mvo.pw}" disabled></p>
+        <p><input class="form-control" type="text" id="name" name="name" th:value="${mvo.name}"></p>
+        <input type="date" id="birthday" name="birthday" th:value="${mvo.birthday}">
+        <p><select class="form-select" id="gender" name="gender">
+            <option value="남" th:selected="${mvo.gender == '남'}">남</option>
+            <option value="여" th:selected="${mvo.gender == '여'}">여</option>
+        </select>
+        </p>
+        <p><input class="btn btn-success" type="submit" value="수정하기"/></p>
+    </form>
+</div>
+
+
+<!-- 푸터 -->
+<th:block th:replace="/include/fragments :: footerFragment"></th:block>
+
+</body>
+</html>

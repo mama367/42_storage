@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!-- 헤더 -->
+<th:block th:replace="/include/fragments :: headerFragment"></th:block>
+
+<!-- 컨텐츠 영역 -->
+<div class="container w-50 mt-3">
+    <h3>회원 등록</h3>
+    <form action="/member/memRegister" method="post">
+        <p><input class="form-control" type="text" name="id" placeholder="아이디"></p>
+        <p><input class="form-control" type="text" name="pw" placeholder="비밀번호"></p>
+        <p><input class="form-control" type="text" id="name" name="name" placeholder="회원명"></p>
+        생년월일<input class="form-control mb-2" type="date" id="birthday" name="birthday" min="1900-01-01">
+        <p><select class="form-select" id="gender" name="gender">
+            <option value="남">남</option>
+            <option value="여">여</option>
+        </select>
+        </p>
+        <p><input class="btn btn-success" type="submit" value="회원등록"/></p>
+    </form>
+</div>
+
+
+<!-- 푸터 -->
+<th:block th:replace="/include/fragments :: footerFragment"></th:block>
+<script>
+    let today = new Date();
+    document.getElementById("birthday").max=today.toISOString().slice(0,10);
+
+</script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!-- 헤더 -->
+<th:block th:replace="/include/fragments :: headerFragment"></th:block>
+
+<!-- 컨텐츠 영역 -->
+<div class="container w-50 mt-3">
+    <h3>상품 수정</h3>
+    <form action="/product/prodModify" method="post">
+        <input type="hidden" name="pno" th:value="${map.get('pno')}">
+        <p><input class="form-control" type="text" id="pname" name="pname" th:value="${map.get('pname')}"></p>
+        <p>
+            <select class="form-select" id="kind" name="kind">
+                <option value="도서" th:selected="${map.get('kind')} == '도서'">도서</option>
+                <option value="생활가전" th:selected="${map.get('kind')} == '생활가전'">생활가전</option>
+            </select>
+        </p>
+        <p><input class="form-control" type="text" id="price" name="price" th:value="${map.get('price')}"></p>
+        <p><input type="submit" class="btn btn-success" value="수정하기"></p>
+    </form>
+</div>
+
+
+<!-- 푸터 -->
+<th:block th:replace="/include/fragments :: footerFragment"></th:block>
+
+</body>
+</html>

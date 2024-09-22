@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!-- 헤더 -->
+<th:block th:replace="/include/fragments :: headerFragment"></th:block>
+
+<!-- 컨텐츠 영역 -->
+<div class="container w-50 mt-3">
+    <h3>유저 수정</h3>
+    <form action="/user/modify" method="post">
+        <input type="hidden" name="no" th:value="${map.get('no')}">
+        <p>이름<input class="form-control" type="text" id="name" name="name" th:value="${map.get('name')}"></p>
+        <p>아이디<input class="form-control" type="text" id="id" name="id" th:value="${map.get('id')}"></p>
+        <p>비밀번호<input class="form-control" type="text" id="password" name="password" th:value="${map.get('password')}"></p>
+        <p>이메일<input class="form-control" type="text" id="email" name="email" th:value="${map.get('email')}"></p>
+        <p>전화번호<input class="form-control" type="text" id="tel" name="tel" th:value="${map.get('tel')}"></p>
+        <p>주소<input class="form-control" type="text" id="address" name="address" th:value="${map.get('address')}"></p>
+        <p>우편번호<input class="form-control" type="text" id="zip" name="zip" th:value="${map.get('zip')}"></p>
+        <p>관리자등급<input class="form-control" type="text" id="privileges" name="privileges" th:value="${map.get('privileges')}"></p>
+        <p>생년월일<input class="form-control" type="text" id="birth" name="birth" th:value="${map.get('birth')}"></p>
+        <p>신고횟수<input class="form-control" type="text" id="report" name="report" th:value="${map.get('report')}"></p>
+        <p>권한신청여부<input class="form-control" type="text" id="request" name="request" th:value="${map.get('request')}"></p>
+        <p><input type="submit" class="btn btn-success" value="수정하기"></p>
+    </form>
+</div>
+
+
+<!-- 푸터 -->
+<th:block th:replace="/include/fragments :: footerFragment"></th:block>
+
+</body>
+</html>

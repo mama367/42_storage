@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<th:block th:fragment="headerFragment">
+    <head>
+        <title>Bootstrap Example</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+        <link href="/css/main.css" rel="stylesheet">
+        <style>
+            /* 헤더 색상 결정 */
+            .navbar-admin { background-color: #292929; } /* 다크 */
+            .navbar-seller { background-color: #ae7d99; } /* 베이비핑크 */
+            .navbar-user { background-color: #0d1b39; } /* 남색 */
+            .navbar-default { background-color: #21bdb8 ; } /* 뽕따민트 */
+        </style>
+    </head>
+
+    <body>
+    <!--  관리 등급에 따라 헤더 컬러 변경  -->
+    <nav th:class="${session.userPrivileges == 0 ? 'navbar navbar-expand-sm navbar-dark navbar-admin' :
+                    (session.userPrivileges == 1 ? 'navbar navbar-expand-sm navbar-dark navbar-seller' :
+                    (session.userPrivileges == 2 ? 'navbar navbar-expand-sm navbar-dark navbar-user' :
+                    'navbar navbar-expand-sm navbar-dark navbar-default'))}">
+
+        <div class="container-fluid">
+            <!--로고 이름 변경 9월 16일-->
+            <a class="navbar-brand" href="/">42_STORAGE</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!--비 로그인시-->
+            <th:block th:if="${session.userId == null}">
+                <div class="collapse navbar-collapse" id="loginNavbar">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/user/login"><i class="fa fa-user-o fa-lg"></i>로그인</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/admin/register"><i class="fa fa-user-o fa-lg"></i>관리자 가입</a>
+                        </li>
+                    </ul>
+                </div>
+            </th:block>
+
+            <!--로그인시-->
+            <th:block th:if="${session.userId != null}">
+                <!--관리자 로그인시-->
+                <th:block th:if="${session.userPrivileges == 0}">
+                    <div class="collapse navbar-collapse" id="logoutNavbar0">
+                        <ul class="navbar-nav ms-auto">
+                            <li class="nav-item">
+                                <a class="nav-link" href="/category">카테고리관리</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/shopping">상품관리</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/artist/shop">상품 전체 페이지</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/cart/cartList.do">장바구니</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/group">그룹</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/artist/artistList">아티스트</a>
+                            </li>
+
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">사용자 관리</a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="/user">사용자 목록</a></li>
+                                    <li><a class="dropdown-item" href="/user/request">판매자 요청</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                        <ul class="navbar-nav ms-auto" id="userId0">
+                            <li class="nav-item">
+                                <p class="nav-link" th:text="|${session.userId}님|">회원아이디</p>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" th:href="@{/user/mypage(no=${session.userNo})}">마이페이지</a>
+                            </li>
+                            <li class="nav-item">
+                                <form action="/user/logout" method="post" style="display: inline;">
+                                    <button type="submit" class="nav-link">로그아웃</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </th:block>
+
+                <!--판매자 로그인시-->
+                <th:block th:if="${session.userPrivileges == 1}">
+                    <div class="collapse navbar-collapse" id="logoutNavbar1">
+                        <ul class="navbar-nav ms-auto">
+                            <li class="nav-item">
+                                <a class="nav-link" href="/shopping">상품관리</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/artist/shop">상품 전체 페이지</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/cart/cartList.do">장바구니</a>
+                            </li>
+                        </ul>
+                        <ul class="navbar-nav ms-auto" id="userId1">
+                            <li class="nav-item">
+                                <p class="nav-link" th:text="|${session.userId}님|">회원아이디</p>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" th:href="@{/user/mypage(no=${session.userNo})}">마이페이지</a>
+                            </li>
+                            <li class="nav-item">
+                                <form action="/user/logout" method="post" style="display: inline;">
+                                    <button type="submit" class="nav-link">로그아웃</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </th:block>
+
+                <!--사용자 로그인시-->
+                <th:block th:if="${session.userPrivileges == 2}">
+                    <div class="collapse navbar-collapse" id="logoutNavbar2">
+                        <ul class="navbar-nav ms-auto">
+                            <li class="nav-item">
+                                <a class="nav-link" href="/shopping">상품관리</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/artist/artistList">아티스트</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/cart/cartList.do">장바구니</a>
+                            </li>
+                        </ul>
+                        <ul class="navbar-nav ms-auto" id="userId2">
+                            <li class="nav-item">
+                                <p class="nav-link" th:text="|${session.userId}님|">회원아이디</p>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" th:href="@{/user/mypage(no=${session.userNo})}">마이페이지</a>
+                            </li>
+                            <li class="nav-item">
+                                <form action="/user/logout" method="post" style="display: inline;">
+                                    <button type="submit" class="nav-link">로그아웃</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </th:block>
+            </th:block>
+        </div>
+    </nav>
+</th:block>
+
+<th:block th:fragment="footerFragment">
+    <footer class ="text-center border-top container mt-3 mb-5"><br>
+        <!--로고 이미지 추가 9월 16일-->
+        <img src="/artist_img/logo.jpeg" alt="42저장소_로고" style="max-width: 150px;"><br>
+        <span style="font-size:11px">
+                    <a href="/info/agreement">AGREEMENT</a>
+                    <a href="/info/privacy">PRIVACY</a>
+                    <a href="/info/guide">GUIDE</a>
+                </span><br>
+        SHOP NAME : 주식회사 MBC.AC.KR OWNER : 김길동 TEL : 010-1234-1234<br>
+        COMPANY REG.NO : 878-78-78787 NETWORK REG.NO : 2020-서울강서-0123<br>
+        ADDRESS : 서울특별시 강서구 XX로0길 12-34(화곡동)5층 MBC아카데미<br>
+        CPO : 김길동 (STORE@MBCacademy.CO.KR)<br>
+        Copyrightⓒ2017 주식회사 MBC아카데미. All rights reserved. &copy; Presented by MBCacademy.<br>
+    </footer>
+</th:block>
+
+<th:block th:fragment="myPage_left">
+    <aside class="border-end sticky-top" style="width:250px" th:fragment="sidebar">
+        <h4>카테고리</h4>
+        <ul>
+            <!-- 카테고리 리스트가 있을 경우 -->
+            <th:block th:if="${categorylist != null and categorylist.size() > 0}">
+                <th:block th:each="dto : ${categorylist}">
+                    <li><a th:href="@{/shopping/UcatList.do(cat_num=${dto.cnum}, code=${dto.ccode}, cat_name=${dto.cat_name})}" th:text="${dto.cat_name}"></a></li>
+                </th:block>
+            </th:block>
+            <!-- 카테고리 리스트가 없을 경우 -->
+            <th:block th:if="${categorylist == null or categorylist.size() == 0}">
+                <li>카테고리 없음</li>
+            </th:block>
+        </ul>
+        <ul class='mt-3'><br></ul>
+
+        <!-- 고객센터 -->
+        <h4>고객센터</h4>
+        <ul>
+            <li><a href="/boardList.do">공지사항</a></li>
+            <li><a href="/boardList.do">자주 묻는 질문</a></li>
+            <li><a href="/boardList.do">1:1 문의</a></li>
+            <li><a href="/boardList.do">서비스센터 안내</a></li>
+        </ul>
+    </aside>
+</th:block>
+
+
+</body>
+</html>

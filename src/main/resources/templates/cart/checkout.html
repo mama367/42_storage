@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>주문 / 결제</title>
+  <style>
+    /* 세로정렬 */
+    td {
+      vertical-align: middle;
+    }
+  </style>
+  <!-- 자바스크립트 파일 -->
+  <script type="text/javascript" th:src="@{/resources/js/checkout.js}" charset="utf-8"></script>
+  <script type="text/javascript">
+    function prodDel() {
+      var checkboxes = document.getElementsByName("chk");
+      var selectedValues = [];
+
+      for (var i = 0; i < checkboxes.length; i++) {
+        if (checkboxes[i].checked) {
+          selectedValues.push(checkboxes[i].value);
+        }
+      }
+
+      if (selectedValues.length > 0) {
+        var hiddenField = document.getElementsByName("delproductNos")[0];
+        hiddenField.value = selectedValues.join(",");
+
+        document.forms["checkForm"].submit();
+      } else {
+        alert("삭제할 아이템을 선택해 주세요.");
+      }
+    }
+
+    function selPayment() {
+      var paymentMethod = document.querySelector('input[name="payment"]:checked').value;
+      document.getElementById('card').style.display = paymentMethod === 'card' ? 'block' : 'none';
+      document.getElementById('real').style.display = paymentMethod === 'rTransfer' ? 'block' : 'none';
+      document.getElementById('deposit').style.display = paymentMethod === 'deposit' ? 'block' : 'none';
+      document.getElementById('hp').style.display = paymentMethod === 'hp' ? 'block' : 'none';
+    }
+
+    function formatNumber(num) {
+      if (num == null) return '0';
+      return num.toLocaleString();
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      selPayment();
+      // 포맷팅 적용
+      document.querySelectorAll('.format-number').forEach(function(element) {
+        var number = parseFloat(element.getAttribute('data-value'));
+        element.textContent = formatNumber(number);
+      });
+    });
+  </script>
+</head>
+<body>
+<th:block th:replace="/include/fragments :: headerFragment"></th:block>
+
+<!-- msg 띄우는 것 -->
+<div th:if="${msg != null}">
+  <p th:text="${msg}"></p>
+</div>
+
+<div class="container w-75 mt-3">
+  <h3>주문 / 결제</h3><br>
+  <table class="table">
+    <thead>
+    <tr>
+      <th><input type="checkbox" id="checkAll" onclick="checkAll()"/> #</th>
+      <th>상품이미지</th>
+      <th>상품명</th>
+      <th>수량</th>
+      <th>판매가</th>
+      <th>합계</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="dto : ${cartList}">
+      <td>
+        <input type="checkbox" name="chk" th:value="${dto.getProductNo()}"/>
+      </td>
+      <td>
+        <a th:href="@{/shopping/UprodView(name=${dto.getNm()}, pSpec=${dto.getPcontent()})}">
+          <img th:src="@{/images/{imageName}(imageName=${dto.getPImage()})}" width="60px" alt="상품 이미지"/>
+        </a>
+      </td>
+      <td th:text="${dto.getNm()}"></td>
+      <td th:text="${dto.getProductQty()} + '개'"></td>
+
+      <!--판매가-->
+      <td>
+        <span th:text="${#numbers.formatDecimal(dto.Pr != null ? dto.getPr() : 0, 0, 'COMMA', 0, 'NONE')}">원</span><br/>
+      </td>
+
+      <!--합계-->
+      <td>
+        <span th:text="${#numbers.formatDecimal(dto.getProductQty() * dto.Pr != null ? dto.getProductQty() * dto.getPr() : 0, 0, 'COMMA', 0, 'NONE')}">원</span><br/>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="7">
+        <form th:action="@{/cart/deleteCheckout.do}" name="checkForm" method="post">
+          <input type="hidden" name="delproductNos"/>
+          <a href="javascript:prodDel()" class="btn btn-sm btn-outline-secondary">선택삭제</a>
+          <!-- 이전 페이지 버튼 추가 -->
+          <a href="/cart/cartList.do" class="btn btn-sm btn-outline-secondary ms-2">이전페이지</a>
+        </form>
+      </td>
+    </tr>
+    </tbody>
+  </table><br/>
+
+  <div class="text-end">
+    장바구니 총액 : <span th:text="${#numbers.formatDecimal(cartTotPr != null ? cartTotPr : 0, 0, 'COMMA', 0, 'NONE')}">원</span>원
+  </div><br/>
+
+  <!-- 구매자 정보 -->
+  <table class="table">
+    <thead>
+    <tr>
+      <th>구매자 정보</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td>이름</td>
+      <td th:text="${mDto.name}"></td>
+    </tr>
+    <tr>
+      <td>이메일</td>
+      <td th:text="${mDto.email}"></td>
+    </tr>
+    <tr>
+      <td>전화번호</td>
+      <td th:text="${mDto.tel}"></td>
+    </tr>
+    <tr>
+      <td>주소</td>
+      <td th:text="${mDto.address}"></td>
+    </tr>
+    <tr>
+      <td>우편번호</td>
+      <td th:text="${mDto.zip}"></td>
+    </tr>
+    <tr>
+      <td><b>결제정보</b></td>
+    </tr>
+    <tr>
+      <td>총 주문금액</td>
+      <td>
+        <span th:text="${#numbers.formatDecimal(cartTotPr != null ? cartTotPr : 0, 0, 'COMMA', 0, 'NONE')}">원</span>원
+      </td>
+    </tr>
+    <tr>
+      <td>결제금액</td>
+      <td id="cartTotPrice">
+        <span th:text="${#numbers.formatDecimal(cartTotPr != null ? cartTotPr : 0, 0, 'COMMA', 0, 'NONE')}">원</span>원
+      </td>
+    </tr>
+    </tbody>
+  </table><br/>
+
+  <!-- 결제방법 -->
+  <form action="/order" method="post" class="form-inline">
+    <th:block>
+      <input type="hidden" name="userNo" th:value="${session.userNo}">
+      <input type="hidden" name="userId" th:value="${session.userId}">
+    </th:block>
+    <div class="form-check">
+      <input type="radio" name="payment" id="cardPay" value="card" class="form-check-input" onclick="selPayment()"/>
+      <label class="form-check-label" for="cardPay">신용카드</label>
+    </div>
+    <div class="form-check">
+      <input type="radio" name="payment" id="rTransferPay" value="rTransfer" class="form-check-input" onclick="selPayment()"/>
+      <label class="form-check-label" for="rTransferPay">실시간 계좌이체</label>
+    </div>
+    <div class="form-check">
+      <input type="radio" name="payment" id="depositPay" value="deposit" class="form-check-input" onclick="selPayment()"/>
+      <label class="form-check-label" for="depositPay">무통장 입금</label>
+    </div>
+    <div class="form-check">
+      <input type="radio" name="payment" id="hpPay" value="hp" class="form-check-input" onclick="selPayment()"/>
+      <label class="form-check-label" for="hpPay">휴대폰 결제</label>
+    </div>
+
+    <!-- 결제방법별 정보 입력 -->
+    <div id="card" style="display:none;">
+      카드사 : <input type="text" name="cardCompany"/><br/>
+      카드번호 : <input type="text" name="cardNumber"/><br/>
+    </div>
+    <div id="real" style="display:none;">
+      은행명 : <input type="text" name="bankName"/><br/>
+      계좌번호 : <input type="text" name="accountNumber"/><br/>
+    </div>
+    <div id="deposit" style="display:none;">
+      은행명 : <input type="text" name="bankName"/><br/>
+      계좌번호 : <input type="text" name="accountNumber"/><br/>
+    </div>
+    <div id="hp" style="display:none;">
+      휴대폰번호 : <input type="text" name="phoneNumber"/><br/>
+    </div>
+
+    <input type="submit" value="결제하기" class="btn btn-primary"/>
+  </form>
+
+</div>
+
+<th:block th:replace="/include/fragments :: footerFragment"></th:block>
+
+</body>
+</html>

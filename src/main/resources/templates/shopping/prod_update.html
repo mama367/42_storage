@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>상품 수정</title>
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"> <!-- Bootstrap CSS 링크 수정 -->
+    <!-- 여기에 다른 CSS 링크 추가 -->
+</head>
+<body>
+<!-- 헤더 포함 -->
+<th:block th:replace="/include/fragments :: headerFragment"></th:block>
+
+<div class="container w-50 mt-5">
+    <h3>상품 수정</h3><br>
+    <form th:action="@{/shopping/updateProduct}" method="post" enctype="multipart/form-data">
+
+        <table class="table table-borderless">
+            <tbody>
+            <tr>
+                <td>상품번호</td>
+                <td>
+                    <input type="text" class="form-control form-control-sm" name="no" th:value="${pDto.getNo()}" readonly/>
+                </td>
+            </tr>
+            <tr>
+                <td>카테고리</td>
+                <td>
+                    <select class="form-select form-select-sm" name="categoryNo">
+                        <th:block th:if="${categoryList == null or #lists.isEmpty(categoryList)}">
+                            <option value="">카테고리 없음</option>
+                        </th:block>
+                        <th:block th:if="${categoryList != null and not #lists.isEmpty(categoryList)}">
+                            <th:block th:each="dto : ${categoryList}">
+                                <option th:value="${dto.getCnum()}" th:text="'[' + ${dto.getCcode()} + '] ' + ${dto.getCat_name()}"
+                                    th:selected="${dto.getCnum()} == ${pDto.getCategoryNo()}">
+                                </option>
+                            </th:block>
+                        </th:block>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>상품명</td>
+                <td>
+                    <input type="text" class="form-control form-control-sm" name="name" th:value="${pDto.getName()}"/>
+                </td>
+            </tr>
+            <tr>
+                <td>상품이미지</td>
+                <td>
+                    <!-- 이미지 표시를 위한 src 설정 -->
+                    <img th:src="@{/images/{imageName}(imageName=${pDto.getImage()})}" width="100px" alt="상품 이미지"/>
+                    <br><br>
+                    <input type="file" class="form-control form-control-sm" name="image"/>
+                    <input type="hidden" name="imageOld" th:value="${pDto.getImage()}"/>
+                    <span th:text="${pDto.getImage()}"></span>
+                </td>
+            </tr>
+            <tr>
+                <td>판매자 번호</td>
+                <td>
+                    <input type="text" class="form-control form-control-sm" name="userNo" th:value="${session.userNo}"/>
+                </td>
+            </tr>
+            <tr>
+                <td>상품가격</td>
+                <td>
+                    <input type="text" class="form-control form-control-sm" name="price" th:value="${pDto.getPrice()}"/>
+                </td>
+            </tr>
+            <tr>
+                <td>아티스트 그룹</td>
+                <td>
+                    <select class="form-select form-select-sm" name="groupNo">
+                        <!-- 상품 스펙이 없을 경우 -->
+                        <option value="" th:if="${groupList.isEmpty()}">스펙 없음</option>
+
+                        <!-- 상품 스펙이 있을 경우 -->
+                        <th:block th:if="${!groupList.isEmpty()}">
+                            <th:block th:each="group : ${groupList}">
+                                <option th:value="${group.get('no')}" th:text="${group.get('name')}"
+                                    th:selected="${group.get('no') == pDto.getGroupNo()}"></option>
+                            </th:block>
+                        </th:block>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>상품 정보</td>
+                <td>
+                    <input type="text" class="form-control form-control-sm" name="pcontent" th:value="${pDto.getPcontent()}"/>
+                </td>
+            </tr>
+            <tr>
+                <td>신고횟수</td>
+                <td>
+                    <input type="text" class="form-control form-control-sm" name="Report" th:value="${pDto.getReport()}" readonly/>
+                </td>
+            </tr>
+            <tr>
+                <td>별점</td>
+                <td>
+                    <input type="text" class="form-control form-control-sm" name="Score" th:value="${pDto.getScore()}" readonly/>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" class="text-center"><br>
+                    <input type="submit" class="btn btn-sm btn-primary" value="상품수정"/>
+                    <a th:href="@{/shopping}" class="btn btn-sm btn-outline-primary">상품 리스트</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </form>
+</div>
+
+<!-- 푸터 포함 -->
+<th:block th:replace="/include/fragments :: footerFragment"></th:block>
+</body>
+</html>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <Pattern>[%d{yyyy-MM-ddHH:mm:ss}:%-3relative] [%thread] %-5level %logger{36} -%msg%n</Pattern>
+        </encoder>
+    </appender>
+
+    <!--  Logback 5단계 로그레벨
+        Error(fatal포함) > Warn > Info > Debug > Trace
+      -->
+    <logger name="com.mbc.day03" level="DEBUG" appender-ref="console" />
+    <logger name="jdbc.sqlonly" level="INFO" appender-ref="console-infolog" />
+    <logger name="jdbc.resultsettable" level="INFO" appender-ref="console-infolog" />
+
+    <root level="off">
+        <appender-ref ref="console"/>
+    </root>
+</configuration>

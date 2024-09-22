@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mbc.day03.domain.Reply2DAO">
+    <select id="getListByPid" resultType="Reply2DTO">
+        <!--      SELECT * FROM tbl_reply
+             WHERE bid = #{bid} -->
+
+        SELECT * FROM prod_reply
+        WHERE pid = #{pid} ORDER BY rno DESC
+        LIMIT #{startIndex}, #{cntPerPage}
+    </select>
+
+    <select id="select" resultType="Reply2DTO">
+        SELECT * FROM prod_reply
+        WHERE rno = #{rno}
+    </select>
+
+    <update id="update">
+        UPDATE prod_reply SET r_contents= #{r_contents},
+        update_date = now()
+        WHERE rno = #{rno}
+    </update>
+
+    <delete id="delete">
+        DELETE FROM prod_reply WHERE rno = #{rno}
+    </delete>
+
+    <insert id="insert">
+        INSERT INTO prod_reply(pid, r_contents, replyer, rating)
+        VALUES(#{pid}, #{r_contents}, #{replyer}, #{rating})
+    </insert>
+
+    <!-- 전체 댓글수 -->
+    <select id="replyCnt" resultType="int">
+        SELECT count(*) FROM prod_reply
+        WHERE pid = #{pid}
+    </select>
+
+    <select id="rating">
+        SELECT AVG(rating) FROM prod_reply
+        WHERE pid = #{pid};
+    </select>
+
+    <update id="prod_rating">
+        UPDATE product SET score= #{score}
+        WHERE no = #{pid}
+    </update>
+
+</mapper>

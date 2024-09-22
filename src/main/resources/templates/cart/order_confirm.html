@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>주문 내역</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .order-info, .customer-info {
+            margin-bottom: 20px;
+        }
+        .order-info h2, .customer-info h2 {
+            color: #666;
+            border-bottom: 2px solid #333;
+            padding-bottom: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .total {
+            text-align: right;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        .footer {
+            text-align: center;
+            font-size: 0.9em;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+<th:block th:replace="/include/fragments :: headerFragment"></th:block>
+<div class="container">
+    <h1>주문 내역</h1>
+
+    <div class="order-info">
+        <h2>주문 정보</h2>
+        <p><strong>주문 번호:</strong> [[${orderList[0].getCode()}]]</p>
+        <p><strong>주문 날짜:</strong> [[${orderList[0].getOrderDate()}]]</p>
+    </div>
+
+    <div class="customer-info">
+        <h2>고객 정보</h2>
+        <p><strong>이름:</strong> [[${user.get('name')}]]</p>
+        <p><strong>이메일:</strong> [[${user.get('email')}]]</p>
+        <p><strong>배송 주소:</strong> [[${user.get('address')}]]</p>
+    </div>
+
+    <table>
+        <thead>
+        <tr>
+            <th>상품명</th>
+            <th>수량</th>
+            <th>가격</th>
+            <th>합계</th>
+        </tr>
+        </thead>
+        <tbody>
+        <th:block th:each="prod : ${cartList}">
+            <tr>
+                <td>[[${prod.Nm}]]</td>
+                <td>[[${prod.productQty}]]</td>
+                <td>
+                    <span th:text="${#numbers.formatDecimal(prod.Pr, 0, 'COMMA', 0, 'NONE')}">원</span><br/>
+                </td>
+                <td>
+                    <span th:text="${#numbers.formatDecimal((prod.Pr * prod.productQty), 0, 'COMMA', 0, 'NONE')}">원</span><br/>
+                </td>
+            </tr>
+        </th:block>
+        <tr>
+            <td colspan="3" class="total">총 합계</td>
+            <td><span th:text="${#numbers.formatDecimal(priceTotal != null ? priceTotal : 0, 0, 'COMMA', 0, 'NONE')}">원</span>원</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="footer">
+        <p>감사합니다! 귀하의 주문을 소중히 처리하겠습니다.</p>
+        <p>문의 사항이 있으시면 <a href="mailto:support@example.com">support@example.com</a>으로 연락주세요.</p>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mbc.day03.domain.ArtistDAO">
+    <select id="getList" resultType="map">
+        select a.no, a.groupNo, g.name AS groupName, a.name, a.image, a.birth
+        from artist a
+        left join `group` g ON a.groupNo = g.no
+    </select>
+
+    <insert id="artistRegister">
+        insert into artist(groupNo, name, image, birth)
+        values(#{groupNo}, #{name}, #{image}, #{birth})
+    </insert>
+
+    <delete id="artistDelete">
+        delete from artist
+        where no = CAST(#{no} AS SIGNED)
+    </delete>
+
+    <select id="getListOne" resultType="map">
+        select no, groupNo, name, image, birth
+        from artist
+        where no = CAST(#{no} AS SIGNED)
+    </select>
+
+    <select id="groupArtist" resultType="map">
+        select *
+        from artist
+        where groupNo = CAST(#{no} AS SIGNED)
+    </select>
+
+    <update id="artistModify">
+        update artist
+        set
+        groupNo= #{groupNo},
+        name= #{name},
+        image= #{image},
+        birth= #{birth}
+        where no = CAST(#{no} AS SIGNED)
+    </update>
+
+    <!-- 선택 삭제 -->
+    <delete id="PartistDelete">
+        delete from artist
+        <where>
+            <foreach collection="chkList" item="item" open="no in (" separator="," close=")">
+                #{item}
+            </foreach>
+        </where>
+    </delete>
+
+    <!--    상품 검색 -->
+    <select id="artistSearch" resultType="map">
+        select no, groupNo, name, image, birth
+        from artist
+        <!-- 동적쿼리 -->
+        where 1 = 1
+        <if test="name != 'all'">
+            and name like CONCAT(#{name}, '%') <!--like 스%, concat(): 문자열 합침함수-->
+        </if>
+        <if test="groupNo != 'all'">
+            and groupNo = #{groupNo}
+        </if>
+    </select>
+    <select id="getArtistByGroupName" resultType="map">
+
+    </select>
+</mapper>
