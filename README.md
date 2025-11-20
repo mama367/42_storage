@@ -1,10 +1,11 @@
-<기획의도> 
-- 2조 안에서의 취미 공유하는 과정에서
-- 한국 문화, 정체성을 상징하는 요소 중 K-POP에 집중 
-- 쇼핑몰과 커뮤니티를 아우르는 아카이빙 플랫폼을 제작
-- Ex. 참고 사이트: 위버스, 번개장터
+<Project_Intent>
+- During the process of sharing hobbies within Team 2,
+we focused on K-POP as a key element that represents Korean culture and identity.
+- We developed an archiving platform that integrates both a shopping mall and a community space.
+- Example reference sites: Weverse (a Korean idol merchandise platform),
+Bunjang (a Korean secondhand marketplace)
 
-<기술스택> 
+<Tech_Stack>
 - Language: Java, JavaScript, Ajax
 - Framework: Spring-boot
 - DB: MYSQL
